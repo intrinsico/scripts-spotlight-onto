@@ -9,7 +9,7 @@ Indexação da base de dados da Globo.
 
 O primeiro passo para indexar uma base de dados utilizando o framework do DBpedia Spotlight é instalar as ferramentas necessárias para o funcionamento do framework.
 
-##0. Requerimentos
+##0. Requisitos
 
 Linux / Windows
 * A versão 0.6.5 do [DBpedia Spotlight](https://github.com/dbpedia-spotlight/dbpedia-spotlight/wiki/Installation) ou superior
