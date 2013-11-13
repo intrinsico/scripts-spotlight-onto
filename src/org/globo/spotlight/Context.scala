@@ -98,6 +98,7 @@ object Context {
   }
   
   def generateContext(it: StmtIterator, outputDir: String) {   
+    generatePermalinksFile(it, outputDir + "permalinks.ttl")
     generateContextFile(outputDir + "permalinks.ttl", outputDir + "context_globo.ttl")            
   }
 }
