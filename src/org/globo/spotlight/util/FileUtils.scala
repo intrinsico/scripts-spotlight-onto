@@ -1,4 +1,24 @@
-package org.aksw.spotlight.util
+/* Copyright 2012 Intrinsic Ltda.
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*
+* Check our project website for information on how to acknowledge the
+* authors and how to contribute to the project:
+* http://spotlight.dbpedia.org
+*
+*/
+
+package org.globo.spotlight.util
 
 import java.io._
 import java.text.Normalizer
@@ -10,6 +30,25 @@ import scala.io.Source
 import org.apache.commons.lang.StringEscapeUtils
 
 object FileUtils {  
+  
+  def createDir(dirPath: String) {
+	val theDir = new File(dirPath)
+	
+	// if the directory does not exist, create it
+	if (!theDir.exists()) {
+	  println("Creating directory: " + dirPath)
+	  val result = theDir.mkdir()
+	
+	  if(result) {    
+	    println("Done.")  
+	  } else {
+	    println("An error occurred!")
+	    System.exit(1)
+	  }
+	} else {
+	  println("Folder already exists, skipping creation!")
+	}
+  }
   
   def writeToFile(file: String, content: String) {
     val pw = new java.io.PrintWriter(new java.io.File(file))
@@ -84,7 +123,6 @@ object FileUtils {
       i += 1
     } 
     FileUtils.appendToFile(outputFile, buffer.toString.dropRight(1))
-    //FileUtils.writeToFile(outputFile, buffer.toString)            
   }
 }
 

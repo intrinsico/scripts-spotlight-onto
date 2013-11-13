@@ -1,7 +1,7 @@
-package org.aksw.spotlight
+package org.globo.spotlight
 
-import org.aksw.spotlight.util.FileUtils._
-import org.aksw.spotlight.util.JenaUtils._
+import org.globo.spotlight.util.FileUtils._
+import org.globo.spotlight.util.JenaUtils._
 import java.util.Date
 import java.io._
 import com.hp.hpl.jena.rdf.model.Model

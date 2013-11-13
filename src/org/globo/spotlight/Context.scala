@@ -1,9 +1,28 @@
-package org.aksw.spotlight
+/* Copyright 2012 Intrinsic Ltda.
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*
+* Check our project website for information on how to acknowledge the
+* authors and how to contribute to the project:
+* http://spotlight.dbpedia.org
+*
+*/
+
+package org.globo.spotlight
 
 import scala.io.Source
-import com.hp.hpl.jena.rdf.model.{StmtIterator, Model}
-import java.util.Date
-import org.aksw.spotlight.util.FileUtils._
+import com.hp.hpl.jena.rdf.model.StmtIterator
+import org.globo.spotlight.util.FileUtils._
 import java.nio.charset.CodingErrorAction
 import scala.io.Codec
 import java.nio.charset.Charset
@@ -14,8 +33,7 @@ object Context {
   private val PREDICATE_LABEL = "http://semantica.globo.com/base/url_do_permalink"
   
   def generatePermalinksFile(it: StmtIterator, outputFile: String) {
-    var buffer = new StringBuilder            
-    //appendToFile(output, buffer)
+    var buffer = new StringBuilder                
 
     var i = 0
     println("Creating permalinks file...")
@@ -48,10 +66,7 @@ object Context {
     codec.onMalformedInput(CodingErrorAction.REPLACE)
     codec.onUnmappableCharacter(CodingErrorAction.REPLACE)
     
-    var buffer = new StringBuilder        
-    //buffer.append("# started ".concat(new Date().toString()).concat("\n"))
-    //appendToFile(output, buffer)
-
+    var buffer = new StringBuilder            
     var i = 0
     println("Creating the context file...")
     
@@ -60,10 +75,6 @@ object Context {
       if (i % 1 == 0) println (i + " HTML pages processed.")
       
       val lineArray = line.split(' ')
-      
-      //val fdp = Source.fromURL(lineArray(2).dropRight(1).reverse.dropRight(1).reverse).mkString
-      //println (fdp)
-      //System.exit(1)
       
       // Extra space before the dot!
       if (lineArray.length == 4) {        
@@ -86,12 +97,7 @@ object Context {
     appendToFile(outputFile, buffer.toString.dropRight(1))
   }
   
-  def generateContext(it: StmtIterator, outputDir: String) {
-    //generatePermalinksFile(it, outputDir + "context_globo.ttl")
-    generateContextFile(outputDir + "mini_mini_permalinks_globo.ttl", outputDir + "context_globo.ttl")
-    //generateContextFile(outputDir + "permalinks_small.ttl", outputDir + "context_globo.ttl")        
-    
-	//val html = Source.fromURL("http://google.com")
-	//val s = html.mkString
+  def generateContext(it: StmtIterator, outputDir: String) {   
+    generateContextFile(outputDir + "permalinks.ttl", outputDir + "context_globo.ttl")            
   }
 }
