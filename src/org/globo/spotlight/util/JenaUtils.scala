@@ -40,7 +40,7 @@ object JenaUtils {
     qexec.execSelect()
   }
     
-  def buildQueryRDFTypePerson(): String = {    
+  def buildQueryRDFTypes(): String = {
     "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>" + '\n' +    
     "SELECT ?s ?o " + '\n' +
     "WHERE {?s rdf:type ?o}"    

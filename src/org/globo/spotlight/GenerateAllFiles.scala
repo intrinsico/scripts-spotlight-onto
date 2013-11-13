@@ -68,7 +68,7 @@ object GenerateAllFiles {
     
       // A query to find if the subject from the main language has any types in the instance types triples file
       println("Querying for all entries with the types...")
-      val typesQuery = buildQueryRDFTypePerson()
+      val typesQuery = buildQueryRDFTypes()
       val typesResults = executeQuery(typesQuery, globoModel)
       println("Done.")
       InstanceTypesNT.generateInstanceTypesNT(typesResults, outputDir + "instance_types_globo.nt")
