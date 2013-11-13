@@ -73,12 +73,14 @@ object GenerateAllFiles {
       println("Done.")
       InstanceTypesNT.generateInstanceTypesNT(typesResults, outputDir + "instance_types_globo.nt")
     
-      // Generate the context file
-      Context.generateContext(it, outputDir)
+      // Generate the redirects file
       Redirects.generateRedirects(it, outputDir)
+      
+      // Generate the context file
+      Context.generateContext(it, outputDir)      
     
       // Generate the final XML, the dump itself
-      Wiki.generateWiki(outputDir + "context_globo.ttl", outputDir + "globo-latest-pages-articles.xml")  
+      Wiki.generateWiki(outputDir + "context_globo.ttl", outputDir + "globo-latest-pages-articles.xml")
     }
   }
 }
