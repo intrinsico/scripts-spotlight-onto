@@ -40,7 +40,7 @@ object Wiki {
     var buffer = new StringBuilder
     var pageBuffer = new StringBuilder    
 
-    buffer.append("<mediawiki>\n")
+    buffer.append("""<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.6/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.6/ http://www.mediawiki.org/xml/export-0.6.xsd" version="0.6" xml:lang="pt">""" + "\n\t<siteinfo>\n\t\t<sitename>Globo</sitename>\n\t\t<base>http://semantica.globo.com</base>\n\t</siteinfo>\n")
 
     var i = 0
     for (line <- Source.fromFile(turtleFile).getLines()) {          
@@ -54,14 +54,14 @@ object Wiki {
           val document = Jsoup.parse(pageBuffer.toString)
 	      buffer.append("\t<page>\n")
 	      buffer.append("\t\t<title>")	    	        
-	      buffer.append(document.title())
+	      buffer.append(document.title().replaceAll("&","e"))
 	      buffer.append("</title>\n")
-	      buffer.append("<ns>0</ns>")
-	      buffer.append("<id>1</id>")
+	      buffer.append("\t\t<ns>0</ns>\n")
+	      buffer.append("\t\t<id>1</id>\n")
 	      buffer.append("\t\t<revision>\n")
 	      buffer.append("\t\t\t<text>\n")
 	      buffer.append("\t\t\t")
-	      buffer.append(document.body().text())
+	      buffer.append(document.body().text().replaceAll("&","e"))
 	      buffer.append("\n")
 	      buffer.append("\t\t\t</text>\n")
 	      buffer.append("\t\t</revision>\n")
@@ -85,6 +85,6 @@ object Wiki {
 
     buffer.append("</mediawiki>")
     
-    appendToFile(outputFile, buffer.toString.dropRight(1))    
+    appendToFile(outputFile, buffer.toString)    
   }
 }

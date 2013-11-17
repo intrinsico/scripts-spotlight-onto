@@ -58,7 +58,7 @@ object GenerateAllFiles {
       }
     
       // Clean so we dont receive a null pointer exception
-      org.apache.commons.io.FileUtils.cleanDirectory(new java.io.File(base_dir + "TDB"))
+      /*org.apache.commons.io.FileUtils.cleanDirectory(new java.io.File(base_dir + "TDB"))
     
       generateDataset(inputDir, inputDir + turtleFile)
     
@@ -77,10 +77,10 @@ object GenerateAllFiles {
       Redirects.generateRedirects(it, outputDir)
       
       // Generate the context file
-      Context.generateContext(it, outputDir)      
+      Context.generateContext(it, outputDir)    */  
     
       // Generate the final XML, the dump itself
-      Wiki.generateWiki(outputDir + "context_globo.ttl", outputDir + "globo-latest-pages-articles.xml")
+      Wiki.generateWiki(outputDir + "context_globo.ttl", outputDir + "globo_dump.xml")            
     }
   }
 }
