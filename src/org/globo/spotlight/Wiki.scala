@@ -32,6 +32,7 @@ import java.net.URL
 import org.jsoup.Jsoup
 import org.jsoup.Connection.Method
 import java.nio.charset.Charset
+import org.mozilla.universalchardet.UniversalDetector
 
 object Wiki {
   
@@ -40,11 +41,14 @@ object Wiki {
 
   def generateWiki(turtleFile: String, outputFile: String) {
     
+    val DEFAULT_ENCODING = "iso-8859-1"
     var buffer = new StringBuilder
     var pageBuffer = new StringBuilder    
 
     buffer.append("""<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.6/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.6/ http://www.mediawiki.org/xml/export-0.6.xsd" version="0.6" xml:lang="pt">""" + "\n\t<siteinfo>\n\t\t<sitename>Globo</sitename>\n\t\t<base>http://semantica.globo.com</base>\n\t</siteinfo>\n")
 
+    val detector = new UniversalDetector(null)
+    
     var i = 0
     for (line <- Source.fromFile(turtleFile).getLines()) {          
       
@@ -58,12 +62,13 @@ object Wiki {
 	      buffer.append("\t<page>\n")
 	      buffer.append("\t\t<title>")	
 	      
-	      // Get title according to case with UTF-8
-	      var encBytes = document.title().replaceAll("&","e").getBytes()
-          val title = new String(encBytes, "UTF-8") 	           
+	      // Get title according to case with UTF-8	      
+	      var encBytes = document.title().replaceAll("&","e").getBytes(DEFAULT_ENCODING)
+	      
+	      var title = new String(encBytes, "UTF-8")	          	      
 	      title match {
             case t if t.contains("|") => buffer.append(title.split("\\|")(0).dropRight(1))             
-            case t if t.contains("no G1 AutoEsporte:") => buffer.append(title.split("no G1 AutoEsporte:")(0).dropRight(1))
+            case t if t.contains("no G1") => buffer.append(title.split("no G1")(0).dropRight(1))
             case t if t.contains("-") => buffer.append(title.split(" - ")(0))
             case _ => buffer.append(title)
           }	      
@@ -73,9 +78,24 @@ object Wiki {
 	      buffer.append("\t\t<revision>\n")
 	      buffer.append("\t\t\t<text>\n")
 	      buffer.append("\t\t\t")
+	      	      
+	      encBytes = document.body().text().replaceAll("&","e").getBytes("iso-8859-1")
+	      detector.handleData(encBytes, 0, encBytes.length)
+	      detector.dataEnd()
 	      
-	      encBytes = document.body().text().replaceAll("&","e").getBytes()
-	      buffer.append(new String(encBytes, "UTF-8"))
+	      val encoding = detector.getDetectedCharset()
+	      if (encoding == null) {
+	        encBytes = document.body().text().replaceAll("&","e").getBytes(DEFAULT_ENCODING)
+	      } else {
+	        encBytes = document.body().text().replaceAll("&","e").getBytes(encoding)
+	      }	       
+	      detector.reset()
+	      	      
+	      if (i < 17947) {
+	    	buffer.append(new String(encBytes, "UTF-8"))
+	      } else {
+	        buffer.append(new String(encBytes, "iso-8859-1"))
+	      }
 	      
 	      buffer.append("\n")
 	      buffer.append("\t\t\t</text>\n")
