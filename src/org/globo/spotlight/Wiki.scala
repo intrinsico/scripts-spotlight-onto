@@ -28,7 +28,10 @@ import org.globo.spotlight.util.FileUtils._
 import java.util.Date
 import scala.io.Source
 import java.io.IOException
+import java.net.URL
 import org.jsoup.Jsoup
+import org.jsoup.Connection.Method
+import java.nio.charset.Charset
 
 object Wiki {
   
@@ -49,19 +52,31 @@ object Wiki {
         if (!line.contains(END_HTML)) {	           
           pageBuffer.append(line)         
         } else {
-          if (i % 100 == 0) println (i + " HTML pages processed.")
-          
-          val document = Jsoup.parse(pageBuffer.toString)
+          i += 1
+          if (i % 100 == 0) println (i + " HTML pages processed.")                   
+          val document = Jsoup.parse(pageBuffer.toString)         
 	      buffer.append("\t<page>\n")
-	      buffer.append("\t\t<title>")	    	        
-	      buffer.append(document.title().replaceAll("&","e"))
+	      buffer.append("\t\t<title>")	
+	      
+	      // Get title according to case with UTF-8
+	      var encBytes = document.title().replaceAll("&","e").getBytes()
+          val title = new String(encBytes, "UTF-8") 	           
+	      title match {
+            case t if t.contains("|") => buffer.append(title.split("\\|")(0).dropRight(1))             
+            case t if t.contains("no G1 AutoEsporte:") => buffer.append(title.split("no G1 AutoEsporte:")(0).dropRight(1))
+            case t if t.contains("-") => buffer.append(title.split(" - ")(0))
+            case _ => buffer.append(title)
+          }	      
 	      buffer.append("</title>\n")
 	      buffer.append("\t\t<ns>0</ns>\n")
-	      buffer.append("\t\t<id>1</id>\n")
+	      buffer.append("\t\t<id>" + i + "</id>\n")
 	      buffer.append("\t\t<revision>\n")
 	      buffer.append("\t\t\t<text>\n")
 	      buffer.append("\t\t\t")
-	      buffer.append(document.body().text().replaceAll("&","e"))
+	      
+	      encBytes = document.body().text().replaceAll("&","e").getBytes()
+	      buffer.append(new String(encBytes, "UTF-8"))
+	      
 	      buffer.append("\n")
 	      buffer.append("\t\t\t</text>\n")
 	      buffer.append("\t\t</revision>\n")
@@ -70,16 +85,14 @@ object Wiki {
 	      pageBuffer.delete(0, buffer.length)
           pageBuffer = new StringBuilder
           
-          if (i != 0 && i % 100 == 0 && !buffer.isEmpty) {
+          if (i % 100 == 0 && !buffer.isEmpty) {
 	        appendToFile(outputFile, buffer.toString.dropRight(1))
 	        buffer.delete(0, buffer.length)
 	        buffer = new StringBuilder
-          }
-          
-          i += 1
+          }                   
 	    }    
       } catch {
-        case e: IOException =>
+        case e: IOException => println("An error occurred while parsing this page!")
       }
     }
 
