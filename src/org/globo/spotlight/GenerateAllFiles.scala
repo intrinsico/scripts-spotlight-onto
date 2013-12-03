@@ -80,7 +80,10 @@ object GenerateAllFiles {
       Context.generateContext(it, outputDir)
     
       // Generate the final XML, the dump itself
-      Wiki.generateWiki(outputDir + "context_globo.ttl", outputDir + "globo_dump.xml")            
+      Wiki.generateWiki(outputDir + "context_globo.ttl", outputDir + "globo_dump.xml") 
+
+      // Generate the Globo DBpedia mapping
+      GloboToDbpedia.generateGlbDbMapping(outputDir + "labels_globo.ttl", "E:/Spotlight/data/dbpedia/pt/labels_pt.nt", outputDir + "globo_map_dbpedia.nt")
     }
   }
 }
