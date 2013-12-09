@@ -84,6 +84,10 @@ object GenerateAllFiles {
 
       // Generate the Globo DBpedia mapping
       GloboToDbpedia.generateGlbDbMapping(outputDir + "labels_globo.ttl", "E:/Spotlight/data/dbpedia/pt/labels_pt.nt", outputDir + "globo_map_dbpedia.nt")
+      
+      // Generate the Globo DBpedia mapping
+      GloboToDbpedia.filterLabels(outputDir + "labels_globo.ttl", outputDir + "person_organization_location_types", outputDir + "filtered_labels_globo.ttl")
+      GloboToDbpedia.generateGlbDbMapping(outputDir + "filtered_labels_globo.ttl", outputDir + "sorted_labels_pt.nt", outputDir + "globo_map_dbpedia.nt")
     }
   }
 }

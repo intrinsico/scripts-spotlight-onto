@@ -1,9 +1,53 @@
 package org.globo.spotlight
 
 import scala.io.Source
+import scala.math.Ordering.Char._
+import scala.collection.mutable.ListBuffer
+import scala.util.control._
 import org.globo.spotlight.util.FileUtils._
 
 object GloboToDbpedia {
+  def filterLabels(glbLabelsFile: String, allowedTypesFile: String, output: String) {
+    var buffer = new StringBuilder
+    var i = 1
+    var j = 1
+    
+    val typesList = new ListBuffer[String]
+    
+    for (line <- Source.fromFile(allowedTypesFile).getLines()) {      
+      typesList += line
+    }
+    
+    val loop = new Breaks
+    for (line <- Source.fromFile(glbLabelsFile).getLines().drop(1)) {
+      val firstColumn = line.split(' ')(0) 
+      loop.breakable {
+        for (aType <- typesList) {
+          if (firstColumn.contains(aType)) {
+            buffer.append(line + "\n")
+            
+            if (i % 100000 == 0 && !buffer.isEmpty) {
+        	  appendToFile(output, buffer.toString.dropRight(1))
+        	  buffer.delete(0, buffer.length)
+        	  buffer = new StringBuilder
+        	  
+        	  println(i + " lines processed.")
+            }
+            
+            i += 1
+            loop.break
+          }
+        }
+      }
+    }
+    
+    if (!buffer.isEmpty) {
+      appendToFile(output, buffer.toString)	
+    }
+
+    println("Done.")
+  }
+  
   def levenshtein(str1: String, str2: String): Int = {
     val lenStr1 = str1.length
     val lenStr2 = str2.length
@@ -26,38 +70,52 @@ object GloboToDbpedia {
     d(lenStr1)(lenStr2)
   }
  
-  def min(nums: Int*): Int = nums.min
-
+  def min(nums: Int*): Int = nums.min  
+  
   def generateGlbDbMapping(glbLabelsFile: String, dbpediaLabelsFile: String, output: String) {    
     var buffer = new StringBuilder
     var i = 1
     var j = 1
-    
-    for (line <- Source.fromFile(glbLabelsFile).getLines().drop(1)) {
-      val glbLineArray = line.split(' ')
-      val glbLabel = glbLineArray(2).replaceAll("""["@pt]""","")              
-      
-      for (line <- Source.fromFile(dbpediaLabelsFile).getLines().drop(1)) {        
-        val dbLineArray = line.split(' ')
-        val dbLabel = dbLineArray(2).replaceAll("""["@pt]""","")                       
         
-        if (levenshtein(glbLabel, dbLabel) == 1) {
-          //println("DB = " + dbLabel)
-          //println("GLB = " + glbLabel)          
-          buffer.append(glbLineArray(0) + " <http://www.w3.org/2002/07/owl#sameAs> " + dbLineArray(0) + " .\n")
-          
-          if (j % 10000 == 0 && !buffer.isEmpty) {
-        	appendToFile(output, buffer.toString.dropRight(1))
-        	buffer.delete(0, buffer.length)
-        	buffer = new StringBuilder
-          }
-          
-          j += 1
-        }
-      }
+    val dbFirstColumn = new ListBuffer[String]
+    val dbSecondColumn = new ListBuffer[String]
+    val dbThirdColumn = new ListBuffer[(String, Int)]
+    
+    var z = 0
+    for (line <- Source.fromFile(dbpediaLabelsFile).getLines().drop(1)) {      
+      val dbLineArray = line.split(" ",3)
+	  // Filter only entries starting with letters
+      if (dbLineArray.length >= 3 && (dbLineArray(2)(1).toLower.toInt >= 97 && dbLineArray(2)(1).toLower.toInt <= 122)) {
+        dbFirstColumn += dbLineArray(0)
+        dbSecondColumn += dbLineArray(1)
+        dbThirdColumn += Tuple2(dbLineArray(2), z)
+        z += 1
+      }      
+    }
+    
+    for (glbLine <- Source.fromFile(glbLabelsFile).getLines().drop(1)) {
+      val glbLineArray = glbLine.split(" ",3)
       
-      if (i % 10000 == 0) println (i + " lines processed.")
-      i += 1
+      if (glbLineArray.length >= 3) {          
+        dbThirdColumn.find((x: Tuple2[String, Int]) => x._1 == glbLineArray(2)) match {
+          case Some(x) => {            
+            buffer.append(glbLineArray(0) + " <http://www.w3.org/2002/07/owl#sameAs> " + dbFirstColumn(x._2) + " .\n")
+	          
+            if (j % 100 == 0 && !buffer.isEmpty) {
+              println ("Globo file current line = " + i)
+              appendToFile(output, buffer.toString.dropRight(1))
+    	      buffer.delete(0, buffer.length)
+    	      buffer = new StringBuilder
+            }
+      
+            j += 1
+          }
+          case None =>   
+        }
+                 
+        if (i % 10000 == 0) println (i + " lines processed.")
+        i += 1
+      }
     }
     
     if (!buffer.isEmpty) {
