@@ -24,9 +24,10 @@ import org.globo.spotlight.util.FileUtils._
 import org.globo.spotlight.util.JenaUtils._
 import org.apache.commons.io
 import java.io._
+import scala.io.Source
 
-object GenerateAllFiles {  
-
+object GenerateAllFiles {    
+  
   def main(args: Array[String]) {
     if (args.length != 2) {
       println("Wrong number of arguments!")
@@ -34,19 +35,19 @@ object GenerateAllFiles {
     } else {    
       // The root folder for the conversion process
       val base_dir = args(0)
-      // The Globo dataset
+      // The Globo dataset file. All the base files concatenated without using graph files
       val turtleFile = args(1)
-      
-      // Creates all the folder we are going to need
-      createDir(base_dir)
-      val inputDir = base_dir + "/turtle_files/"
-      createDir(inputDir)
-      val outputDir = base_dir + "/output/"
-      createDir(outputDir)
+                       
+      val inputDir = base_dir + "/turtle_files2/"
+      val outputDir = base_dir + "/output_ori/"
       val tdbDir = base_dir + "/TDB/"
-      createDir(tdbDir)
       
-      //TODO: download the Globo files into the turtl_files folder, and extract them without the .graph files
+      // Creates all folders we are going to need
+      createDir(base_dir)
+      createDir(base_dir + "/turtle_files/")      
+      createDir(base_dir + "/output_ori/")
+      createDir(base_dir + "/TDB/")
+            
       val file = new File(inputDir)      
       if(file.isDirectory()) { 
 		if(file.list().length == 0){
@@ -54,16 +55,22 @@ object GenerateAllFiles {
 		  System.exit(1)
 		}
       } else {
+        println("Please use a valid input directory.")
         System.exit(1)
       }
+               
+      // Clean the current TDB folder so we don't receive a null pointer exception
+      org.apache.commons.io.FileUtils.cleanDirectory(new java.io.File(tdbDir))
     
-      // Clean so we dont receive a null pointer exception
-      org.apache.commons.io.FileUtils.cleanDirectory(new java.io.File(base_dir + "TDB"))
+      // Combines all globo files into one .ttl
+      //generateDataset(inputDir, inputDir + turtleFile)
+      // Converts the dataset to iso
+      //convertFormat(inputDir + "/" + turtleFile, inputDir + "/test.ttl")      
     
-      generateDataset(inputDir, inputDir + turtleFile)
-    
-      val globoModel = loadFileToJena(inputDir + turtleFile, tdbDir)
-      val it = globoModel.listStatements()
+      //val globoModel = loadFileToJena(inputDir + turtleFile, tdbDir)      
+      //LabelsNT.generateLabelsJena(globoModel, outputDir + "labels_globo.nt")          
+      
+      /*val it = globoModel.listStatements()
       LabelsNT.generateLabelsNT(it, outputDir + "labels_globo.nt")
     
       // A query to find if the subject from the main language has any types in the instance types triples file
@@ -77,17 +84,39 @@ object GenerateAllFiles {
       Redirects.generateRedirects(it, outputDir)
       
       // Generate the context file
-      Context.generateContext(it, outputDir)
+      Context.generateContext(it, outputDir)    */  
     
       // Generate the final XML, the dump itself
-      Wiki.generateWiki(outputDir + "context_globo.ttl", outputDir + "globo_dump.xml") 
-
-      // Generate the Globo DBpedia mapping
-      GloboToDbpedia.generateGlbDbMapping(outputDir + "labels_globo.ttl", "E:/Spotlight/data/dbpedia/pt/labels_pt.nt", outputDir + "globo_map_dbpedia.nt")
+      //Wiki.generateWikiHTML(outputDir + "context_globo.ttl", outputDir + "globo_dump.xml")
+      //Wiki.generateWikiJena(outputDir + "permalinks_globo.ttl", outputDir + "globo_dump.xml", globoModel)
       
       // Generate the Globo DBpedia mapping
-      GloboToDbpedia.filterLabels(outputDir + "labels_globo.ttl", outputDir + "person_organization_location_types", outputDir + "filtered_labels_globo.ttl")
-      GloboToDbpedia.generateGlbDbMapping(outputDir + "filtered_labels_globo.ttl", outputDir + "sorted_labels_pt.nt", outputDir + "globo_map_dbpedia.nt")
+      //GloboToDbpedia.filterLabels(outputDir + "labels_globo.ttl", outputDir + "person_organization_location_types", outputDir + "filtered_labels_globo.ttl")
+      //GloboToDbpedia.generateGlbDbMapping(outputDir + "filtered_labels_globo.ttl", outputDir + "sorted_labels_pt.nt", outputDir + "globo_map_dbpedia.nt")
+      //GloboToDbpedia.generateGlbDbMapping2(outputDir + "labels_final.nt", outputDir + "globo_map_dbpedia.nt")
+     
+      // Get or tries to get only the correct mapping from the Globo -> Wikipedia mapping
+      //GloboToDbpedia.getCorrectEntries(outputDir + "sorted_globo_map_dbpedia.nt", outputDir + "globo_final_map_dbpedia.nt")      
+      
+      // Generates the first utf globo_occs
+      // sort -t$'\t' -k2 occs.tsv > occs.uriSorted.tsv 
+      //GloboToDbpedia.filterOccs(outputDir + "globo_final_map_dbpedia.nt", "E:/Spotlight/data/output/pt/occs_uriSorted.tsv" , outputDir + "occs_globo_0.tsv")      
+      //fixOccs(outputDir + "occs_globo_0.tsv", outputDir + "occs_globo_1.tsv")
+      
+      // Generates the first video based globo occs
+      //fixOccs("E:/Spotlight/data/output/pt/occs_uriSorted.tsv", outputDir + "final_occs_uriSorted.tsv")
+      //VideosNT.complementEntities(outputDir + "videos_dataset.ttl", outputDir + "final_occs_noNumber_uriSorted.tsv", outputDir, outputDir + "occs_globo_1.tsv")
+            
+      // Generates the final occs with extra column
+      // cat occs_globo_1.tsv videos_occs.tsv > occs_globo_2.tsv
+      // sort -u occs_globo_2.tsv > occs_globo_2_sorted.tsv
+      
+      // Because of encoding problems the sort might not filter duplicates, use awk also
+      // awk -F '\t' '!x[$1]++' occs_globo_2_sorted.tsv > sorted_occs_globo_2.tsv
+      
+      // cat occs.tsv sorted_occs_globo_2.tsv > test.tsv
+      // sort test.tsv > sorted_test.tsv
+      GloboToDbpedia.addColumnToOccs(outputDir + "sorted_test.tsv", outputDir + "occs_globo_3.tsv")
     }
   }
 }

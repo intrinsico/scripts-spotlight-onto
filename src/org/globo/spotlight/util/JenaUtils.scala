@@ -40,23 +40,35 @@ object JenaUtils {
     qexec.execSelect()
   }
     
-  def buildQueryRDFTypes(): String = {
+  def buildQueryRDFTypes(): String = {    
     "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>" + '\n' +    
     "SELECT ?s ?o " + '\n' +
     "WHERE {?s rdf:type ?o}"    
   }
   
+  def buildQueryLabels(): String = {
+    "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>" + '\n' +    
+    "SELECT ?s ?o " + '\n' +
+    "WHERE {?s rdfs:label ?o}"
+  }
+  
   def loadFileToJena(turtleFile: String, tdbPath: String): Model = {
-    val in = new BufferedInputStream(new FileInputStream(turtleFile));    
-    val charsetDecoder = Charset.forName("UTF-8").newDecoder();
-	charsetDecoder.onMalformedInput(CodingErrorAction.REPLACE);
-	charsetDecoder.onUnmappableCharacter(CodingErrorAction.REPLACE);
-	val inputReader = new InputStreamReader(in, charsetDecoder);                 
+    val in = new BufferedInputStream(new FileInputStream(turtleFile))    
+    val charsetDecoder = Charset.forName("iso-8859-1").newDecoder()        
+    
+	charsetDecoder.onMalformedInput(CodingErrorAction.REPLACE)
+	charsetDecoder.onUnmappableCharacter(CodingErrorAction.REPLACE)
+	val inputReader = new InputStreamReader(in, charsetDecoder)                 
     
 	// Create a model to represent the Globo dataset
 	println("Reading file into Jena")
     val fbTdbStore = createModel(tdbPath)	
     fbTdbStore.read(inputReader, null, "TURTLE")
     fbTdbStore
+  }
+  
+  def queryUri(uri: String): String = {           
+    "SELECT ?s ?p ?o" + '\n' +
+    "WHERE {" + uri + "?p ?o}"    
   }
 }

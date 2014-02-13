@@ -31,6 +31,49 @@ import org.apache.commons.lang.StringEscapeUtils
 
 object FileUtils {  
   
+  def convertFormat(aFile: String, output: String) {
+    
+    implicit val codec = Codec("iso-8859-1")    
+    codec.onMalformedInput(CodingErrorAction.REPLACE)
+    codec.onUnmappableCharacter(CodingErrorAction.IGNORE)
+    var buffer = new StringBuilder
+    var i = 1
+    
+    for (line <- Source.fromFile(aFile).getLines()) {
+      try {
+        buffer.append(new String(line.getBytes("iso-8859-1")))
+        buffer.append("\n")
+        
+        if (i % 100000 == 0 && !buffer.isEmpty) {
+          println ("Globo file current line = " + i)
+          appendToFile(output, buffer.toString.dropRight(1))
+    	  buffer.delete(0, buffer.length)
+    	  buffer = new StringBuilder
+        }
+      } catch {
+        case e: IOException => println("An error occurred while parsing this string!")
+      }
+      
+      i += 1
+    }
+    
+    if (!buffer.isEmpty) {
+      appendToFile(output, buffer.toString)	
+    }
+  }
+  
+  def fixOccs(ori_occs: String, final_occs: String) {
+    
+    implicit val codec = Codec("UTF-8")    
+    codec.onMalformedInput(CodingErrorAction.REPLACE)
+    codec.onUnmappableCharacter(CodingErrorAction.REPLACE)
+    
+    for (line <- Source.fromFile(ori_occs).getLines()) {
+      val lineArray = line.split('\t')
+      appendToFile(final_occs, lineArray(1) + '\t' + lineArray(0) + '\t' + lineArray(2) + '\t' + lineArray(3) + '\t' + lineArray(4))
+    }
+  }
+  
   def createDir(dirPath: String) {
 	val theDir = new File(dirPath)
 	
@@ -72,7 +115,13 @@ object FileUtils {
     }
   }
   
+  
+  
   def generateDataset(dirPath: String, outputFile: String) {
+    implicit val codec = Codec("iso-8859-1")    
+    codec.onMalformedInput(CodingErrorAction.IGNORE)
+    codec.onUnmappableCharacter(CodingErrorAction.IGNORE)
+    
     println("Generating a single dataset file.")    
     var i = 1    
     for (file <- new java.io.File(dirPath).listFiles.map(_.getName).toList) {      

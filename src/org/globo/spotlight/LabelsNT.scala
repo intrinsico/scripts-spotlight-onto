@@ -21,16 +21,65 @@
 package org.globo.spotlight
 
 import org.globo.spotlight.util.FileUtils._
+import org.globo.spotlight.util.JenaUtils._
 import java.util.Date
 import java.io._
+import java.nio.charset.CodingErrorAction
+import scala.io.Codec
 import scala.io.Source
 import com.hp.hpl.jena.rdf.model.{StmtIterator, Model}
+import com.hp.hpl.jena.query.ResultSetFormatter
 
 object LabelsNT {
 
   private val PREDICATE_LABEL = "http://www.w3.org/2000/01/rdf-schema#label"
   private val OBJECT_LABEL = "http://xmlns.com/foaf/0.1/Person"
-  private val INSERT_SPACE_UPPERCASE = "(\\p{Ll})(\\p{Lu})"  
+  private val INSERT_SPACE_UPPERCASE = "(\\p{Ll})(\\p{Lu})"         
+    
+  def generateLabelsJena(aModel: Model, output: String) {
+    
+    implicit val codec = Codec("iso-8859-1")    
+    codec.onMalformedInput(CodingErrorAction.IGNORE)
+    codec.onUnmappableCharacter(CodingErrorAction.IGNORE)
+    
+    val labelsQuery = buildQueryLabels()    
+    val it = executeQuery(labelsQuery, aModel)
+    val aList = ResultSetFormatter.toList(it)
+    val aListIt = aList.iterator()
+
+    
+    var buffer = new StringBuilder
+    
+    var i = 1
+    println("Creating labels file...")
+    while (aListIt.hasNext()) {
+    //while (it.hasNext()) {
+      
+      if (i % 100000 == 0) println (i + " lines processed.")
+            
+      //val next = it.next()
+      val next = aListIt.next()
+      val subject = next.get("s")      
+      //val obj = new String (next.get("o").toString.getBytes("utf-8"))
+      //val obj = new String (next.get("o").toString.getBytes("utf-8"), "iso-8859-1")
+      val obj = next.get("o")
+      //val obj = next.getLiteral("o").toString
+      
+      buffer.append("<" + subject + ">\t<http://www.w3.org/2000/01/rdf-schema#label>\t" + """"""" + obj + """"""" + "@pt .\n")           
+            
+      if (i % 1000000 == 0 && !buffer.isEmpty) {
+        appendToFile(output, buffer.toString.dropRight(1))
+        buffer.delete(0, buffer.length)
+        buffer = new StringBuilder
+      } 
+      
+      i += 1            
+    }
+    
+    if (!buffer.isEmpty) {
+      appendToFile(output, buffer.toString.dropRight(1))
+    }
+  }  
     
   def generateLabelsNT(it: StmtIterator, output: String) {             
     

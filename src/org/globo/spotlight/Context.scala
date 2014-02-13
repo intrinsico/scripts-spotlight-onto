@@ -97,7 +97,7 @@ object Context {
     appendToFile(outputFile, buffer.toString.dropRight(1))
   }
   
-  def generateContext(it: StmtIterator, outputDir: String) {   
+  def generateContext(it: StmtIterator, outputDir: String) { 
     generatePermalinksFile(it, outputDir + "permalinks.ttl")
     generateContextFile(outputDir + "permalinks.ttl", outputDir + "context_globo.ttl")            
   }
