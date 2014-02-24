@@ -67,21 +67,59 @@ object GenerateAllFiles {
       // Converts the dataset to iso
       //convertFormat(inputDir + "/" + turtleFile, inputDir + "/test.ttl")      
     
-      //val globoModel = loadFileToJena(inputDir + turtleFile, tdbDir)      
-      //LabelsNT.generateLabelsJena(globoModel, outputDir + "labels_globo.nt")          
+      ////////////////////////////////////////////////////// LABELS ///////////////////////////////////////////////
+      //val globoModel = loadFileToJena(inputDir + turtleFile, tdbDir)            
+      //val it = globoModel.listStatements()
+      //LabelsNT.generateLabelsNT(it, outputDir + "labels_globo.nt")
       
-      /*val it = globoModel.listStatements()
-      LabelsNT.generateLabelsNT(it, outputDir + "labels_globo.nt")
-    
+      // Since Jena cannot read various subjects in the format <SOME_SUBJECT> we need to do extra processing
+      // awk -F '\t' '$2 ~ /label/{print}' globo_dataset.ttl > labels_test.ttl
+      // awk -F '\t' '$1 ~ /</{print}' labels_test.ttl > labels_missing.ttl
+      // awk -F '\t' '{ gsub("\" .","\"@pt .",$3); print $1" <http:\/\/www.w3.org\/2000\/01/rdf-schema#label> "$3}' labels_missing.ttl >> labels_globo.nt
+      // cat labels_globo.nt >> labels_pt.nt
+      // sort -u labels_pt.nt > unique_labels_pt.nt
+      // awk -F '\t' '!x[$1]++' unique_labels_pt.nt > labels_pt.nt
+      
+      //For the final part, clean all invalid entries in the labels file
+      // Removing lines with special characters from the labels themselves and labels with length size one      
+      // awk -F '"' '{if ((length($2) != 1) && ($2 !~ /(^|[^\\])[][|{}()!?+*.%$^]/)) print}' labels_pt.nt > tmp_labels_pt.nt
+      // LabelsNT.filterLabelsWithStopwords(base_dir + "/tmp_labels_pt.nt", "E:/Spotlight/data/resources/pt/stopwords.list", base_dir + "/tmp2_labels_pt.nt")
+      
+      // Convert the final file to utf-8 in case its not already in that encoding
+      // iconv tmp2_labels_pt.nt -f iso-8859-1 -t utf-8 > tmp3_labels_pt.nt
+      // rm tmp_labels_pt.nt
+      // rm tmp2_labels_pt.nt
+      // mv tmp3_labels_pt.nt labels_pt.nt
+      // bzip2 -k labels_pt.nt
+      
+      /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      ///////////////////////////////////////////////// INSTANCE TYPES ////////////////////////////////////////////
+      /*
       // A query to find if the subject from the main language has any types in the instance types triples file
       println("Querying for all entries with the types...")
       val typesQuery = buildQueryRDFTypes()
       val typesResults = executeQuery(typesQuery, globoModel)
       println("Done.")
       InstanceTypesNT.generateInstanceTypesNT(typesResults, outputDir + "instance_types_globo.nt")
+      // Adds the DBpedia types of Person, Location and Organisation to the Globo respective entities
+      // awk -F ' ' '$3 ~ /Pessoa/{print}' instance_types_globo.ttl > pessoa.ttl
+      // awk -F ' ' '{print $1" "$2" <http://dbpedia.org/ontology/Person> ."}' pessoa.ttl > pessoa2.ttl
+      // awk -F ' ' '$3 ~ /Organizacao/{print}' instance_types_globo.ttl > organizacao.ttl
+      // awk -F ' ' '{print $1" "$2" <http://dbpedia.org/ontology/Organisation> ."}' organizacao.ttl > organizacao2.ttl
+      // awk -F ' ' '$3 ~ /Endereco/{print}' instance_types_globo.ttl >> lugar.ttl
+      // awk -F ' ' '$3 ~ /Regiao/{print}' instance_types_globo.ttl >> lugar.ttl
+      // awk -F ' ' '$3 ~ /Cidade/{print}' instance_types_globo.ttl >> lugar.ttl
+      // awk -F ' ' '$3 ~ /Pais/{print}' instance_types_globo.ttl >> lugar.ttl
+      // awk -F ' ' '$3 ~ /UF/{print}' instance_types_globo.ttl >> lugar.ttl
+      // awk -F ' ' '$3 ~ /AcidenteGeografico/{print}' instance_types_globo.ttl >> lugar.ttl
+      // awk -F ' ' '$3 ~ /Bairro/{print}' instance_types_globo.ttl >> lugar.ttl                        
+      // awk -F ' ' '{print $1" "$2" <http://dbpedia.org/ontology/Place> ."}' lugar.ttl > lugar2.ttl
+      // cat pessoa2.ttl organizacao2.ttl lugar2.ttl >> instance_types_globo.ttl
+      // Sort when combining with the dbpedia types file!      
     
       // Generate the redirects file
       Redirects.generateRedirects(it, outputDir)
+      // cat redirects_globo.ttl >> redirects_pt.nt
       
       // Generate the context file
       Context.generateContext(it, outputDir)    */  
@@ -116,7 +154,7 @@ object GenerateAllFiles {
       
       // cat occs.tsv sorted_occs_globo_2.tsv > test.tsv
       // sort test.tsv > sorted_test.tsv
-      GloboToDbpedia.addColumnToOccs(outputDir + "sorted_test.tsv", outputDir + "occs_globo_3.tsv")
+      //GloboToDbpedia.addColumnToOccs(outputDir + "sorted_test.tsv", outputDir + "occs_globo_3.tsv")
     }
   }
 }

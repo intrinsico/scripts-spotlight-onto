@@ -138,5 +138,20 @@ object LabelsNT {
     //FileUtils.writeToFile(output, buffer.toString)
 
     println("Done.")
-  }    
+  }
+  
+  def filterLabelsWithStopwords(labelsFile: String, stopwordsFile: String, outputFile: String) {
+    val stopwordsSet = Source.fromFile(stopwordsFile).getLines().toSet
+    
+    val labelsStream = new PrintStream(new File(outputFile))
+    for (line <- Source.fromFile(labelsFile).getLines()) {
+      val lineArray = line.split(""""""")      
+      if (lineArray.length == 3) {
+        val label = lineArray(1)        
+        if (!(stopwordsSet contains label.toLowerCase())) {
+          labelsStream.println(line)
+        }
+      }
+    }
+  }
 }
