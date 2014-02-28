@@ -115,12 +115,12 @@ object FileUtils {
     }
   }
   
-  
-  
   def generateDataset(dirPath: String, outputFile: String) {
     implicit val codec = Codec("iso-8859-1")    
     codec.onMalformedInput(CodingErrorAction.IGNORE)
     codec.onUnmappableCharacter(CodingErrorAction.IGNORE)
+	//codec.onMalformedInput(CodingErrorAction.REPLACE)
+    //codec.onUnmappableCharacter(CodingErrorAction.REPLACE)
     
     println("Generating a single dataset file.")    
     var i = 1    
