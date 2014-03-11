@@ -66,8 +66,7 @@ object GenerateAllFiles {
       generateDataset(inputDir, inputDir + turtleFile)      
     
       ////////////////////////////////////////////////////// LABELS ///////////////////////////////////////////////
-      val globoModel = loadFileToJena(inputDir + turtleFile, tdbDir)            
-      //val it = globoModel.listStatements()
+      val globoModel = loadFileToJena(inputDir + turtleFile, tdbDir)                  
       val labelsQuery = buildQueryRDFLabelsWithTypesPOP()
       val labelsResults = executeQuery(labelsQuery, globoModel)
       println("Done.")
@@ -82,10 +81,13 @@ object GenerateAllFiles {
       /*
       // A query to find if the subject from the main language has any types in the instance types triples file
       println("Querying for all entries with the types...")
-      val typesQuery = buildQueryRDFTypes()
+      val typesQuery = buildQueryRDFAllTypes()
       val typesResults = executeQuery(typesQuery, globoModel)
       println("Done.")
+      
+      // Generating the instance types file itself
       InstanceTypesNT.generateInstanceTypesNT(typesResults, outputDir + "instance_types_globo.nt")
+      
       // Adds the DBpedia types of Person, Location and Organisation to the Globo respective entities
       // awk -F ' ' '$3 ~ /Pessoa/{print}' instance_types_globo.ttl > pessoa.ttl
       // awk -F ' ' '{print $1" "$2" <http://dbpedia.org/ontology/Person> ."}' pessoa.ttl > pessoa2.ttl
@@ -100,25 +102,21 @@ object GenerateAllFiles {
       // awk -F ' ' '$3 ~ /Bairro/{print}' instance_types_globo.ttl >> lugar.ttl                        
       // awk -F ' ' '{print $1" "$2" <http://dbpedia.org/ontology/Place> ."}' lugar.ttl > lugar2.ttl
       // cat pessoa2.ttl organizacao2.ttl lugar2.ttl >> instance_types_globo.ttl
-      // Sort when combining with the dbpedia types file!      
-    
-      // Generate the redirects file
-      Redirects.generateRedirects(it, outputDir)
-      // cat redirects_globo.ttl >> redirects_pt.nt
+      // Sort when combining with the dbpedia types file!            
       
-      // Generate the context file
-      Context.generateContext(it, outputDir)    */  
+      // Generate the context file*/
+      //val it = globoModel.listStatements()
+      //Context.generateContext(it, outputDir)  
     
       // Generate the final XML, the dump itself
       //Wiki.generateWikiHTML(outputDir + "context_globo.ttl", outputDir + "globo_dump.xml")
       //Wiki.generateWikiJena(outputDir + "permalinks_globo.ttl", outputDir + "globo_dump.xml", globoModel)
       
-      // Generate the Globo DBpedia mapping
-      //GloboToDbpedia.filterLabels(outputDir + "labels_globo.ttl", outputDir + "person_organization_location_types", outputDir + "filtered_labels_globo.ttl")
-      //GloboToDbpedia.generateGlbDbMapping(outputDir + "filtered_labels_globo.ttl", outputDir + "sorted_labels_pt.nt", outputDir + "globo_map_dbpedia.nt")
-      //GloboToDbpedia.generateGlbDbMapping2(outputDir + "labels_final.nt", outputDir + "globo_map_dbpedia.nt")
+      // Generate the Globo DBpedia mapping      
+      //GloboToDbpedia.generateGlbDbMapping(outputDir + "labels_globo.nt", outputDir + "sorted_labels_pt.nt", outputDir + "globo_map_dbpedia.nt")      
      
       // Get or tries to get only the correct mapping from the Globo -> Wikipedia mapping
+      // sort globo_map_dbpedia.nt > sorted_globo_map_dbpedia.nt
       //GloboToDbpedia.getCorrectEntries(outputDir + "sorted_globo_map_dbpedia.nt", outputDir + "globo_final_map_dbpedia.nt")                 
     }
   }

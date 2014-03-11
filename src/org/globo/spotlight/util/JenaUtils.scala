@@ -74,13 +74,13 @@ object JenaUtils {
     "}"
   }    
   
-  def buildQueryRDFTypes(): String = {    
+  def buildQueryRDFAllTypes(): String = {    
     "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>" + '\n' +    
     "SELECT ?s ?o " + '\n' +
     "WHERE {?s rdf:type ?o}"    
   }
   
-  def buildQueryLabels(): String = {
+  def buildQueryAllLabels(): String = {
     "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>" + '\n' +    
     "SELECT ?s ?o " + '\n' +
     "WHERE {?s rdfs:label ?o}"

@@ -5,150 +5,18 @@ import scala.math.Ordering.Char._
 import scala.collection.mutable.ListBuffer
 import scala.util.control._
 import scala.collection.mutable.ArrayBuffer
+import scala.io.Codec
 import org.globo.spotlight.util.FileUtils._
 import org.globo.spotlight.util.StringUtils._
 import org.jsoup.Jsoup
 import org.jsoup.Connection.Method
 import java.io.IOException
 import java.nio.charset.CodingErrorAction
-import scala.io.Codec
 import java.nio.charset.Charset
+import java.io._
 
 object GloboToDbpedia {
-  def addColumnToOccs(occsFile: String, output: String) {
-    implicit val codec = Codec("utf-8")    
-    codec.onMalformedInput(CodingErrorAction.REPLACE)
-    codec.onUnmappableCharacter(CodingErrorAction.REPLACE)
     
-    var buffer = new StringBuilder
-    var i = 1 
-    var auxLine = Source.fromFile(occsFile).getLines().next()
-    var auxLineArray = auxLine.split('\t')
-    var auxOffset = auxLineArray(auxLineArray.length-1)       
-    
-    for (line <- Source.fromFile(occsFile).getLines().drop(1)) {
-      val lineArray = line.split("\t")
-      if (lineArray(lineArray.length-1) == auxOffset) {
-        buffer.append(auxLine + "\tG\n")
-        auxLine = ""
-        auxOffset = ""
-      } else {
-        if (auxOffset != "") {
-          buffer.append(auxLine + "\tDB\n")          
-        } 
-        auxLine = line
-        auxOffset = lineArray(lineArray.length-1)
-      }
-      
-      if (i % 10000 == 0 && !buffer.isEmpty) {
-        appendToFile(output, buffer.toString.dropRight(1))
-	    buffer.delete(0, buffer.length)
-	    buffer = new StringBuilder
-	  
-	    println(i + " lines processed.")
-      }
-      
-      i += 1
-    }
-    
-    if (!buffer.isEmpty) {
-      appendToFile(output, buffer.toString)	
-    }
-
-    println("Done.")
-  }     
-  
-  def filterLabels(glbLabelsFile: String, allowedTypesFile: String, output: String) {
-    var buffer = new StringBuilder
-    var i = 1
-    var j = 1
-    
-    val typesList = new ListBuffer[String]
-    
-    for (line <- Source.fromFile(allowedTypesFile).getLines()) {      
-      typesList += line
-    }
-    
-    val loop = new Breaks
-    for (line <- Source.fromFile(glbLabelsFile).getLines().drop(1)) {
-      val firstColumn = line.split(' ')(0) 
-      loop.breakable {
-        for (aType <- typesList) {
-          if (firstColumn.contains(aType)) {
-            buffer.append(line + "\n")
-            
-            if (i % 100000 == 0 && !buffer.isEmpty) {
-        	  appendToFile(output, buffer.toString.dropRight(1))
-        	  buffer.delete(0, buffer.length)
-        	  buffer = new StringBuilder
-        	  
-        	  println(i + " lines processed.")
-            }
-            
-            i += 1
-            loop.break
-          }
-        }
-      }
-    }
-    
-    if (!buffer.isEmpty) {
-      appendToFile(output, buffer.toString)	
-    }
-
-    println("Done.")
-  }
-  
-  def filterOccs(glbToDbFile: String, occsFile: String, output: String) {
-    
-    implicit val codec = Codec("UTF-8")    
-    codec.onMalformedInput(CodingErrorAction.REPLACE)
-    codec.onUnmappableCharacter(CodingErrorAction.REPLACE)
-    
-    var buffer = new StringBuilder
-    val loop = new Breaks
-    var i = 1
-    var j = 1
-    
-    for (line <- Source.fromFile(glbToDbFile).getLines()) {      
-      val tcArray = line.split(' ')(2).split('/')
-      val uri = tcArray(tcArray.length-1).dropRight(1)
-      var canStop = false           
-      
-      loop.breakable {
-        for (occsLine <- Source.fromFile(occsFile).getLines()) { 
-          val occsUri = occsLine.split('\t')(1) 
-          if (uri.charAt(0) == occsUri.charAt(0)) {
-            if (uri == occsUri) {
-              println("uri = " + uri)
-              println("occsUri = " + occsUri)
-              buffer.append(occsLine + '\n')
-            
-              if (j % 25 == 0 && !buffer.isEmpty) {
-                println ("Relation file current line = " + i)
-                appendToFile(output, buffer.toString.dropRight(1))
-    	        buffer.delete(0, buffer.length)
-    	        buffer = new StringBuilder
-              }
-      
-              j += 1
-              canStop = true              
-            }
-          } else if (uri.charAt(0) < occsUri.charAt(0) || canStop == true) {
-            loop.break
-          }
-        }
-      }
-      
-      if (i % 25 == 0) println(i + " lines processed.")
-      i += 1
-    }
-    
-    if (!buffer.isEmpty) {
-      appendToFile(output, buffer.toString)	
-    }
-  }
-  
   def getCorrectCities(fcUri: String, tc: String) {
     try {
       val documentText = removeDiacriticalMarks(Jsoup.connect(tc).get().text()).toLowerCase()
@@ -231,8 +99,7 @@ object GloboToDbpedia {
     }
   }
   
-  def getCorrectEntries(glbDbMapFile: String, estadosFile: String, output: String) {
-    var buffer = new StringBuilder
+  def getCorrectEntries(glbDbMapFile: String, estadosFile: String, output: String) {    
     var i = 1
     var j = 1
     var corrects = 0
@@ -244,7 +111,8 @@ object GloboToDbpedia {
     
     // Generate the tuples list of states we are going to need, Complete name and Abbreviation
     val estadosList = generateStatesList(estadosFile)
-    
+    val correctEntriesStream = new PrintStream(new File(output))
+    println("Getting the correct entries from the Globo to DBpedia mapping...")
     for (line <- Source.fromFile(glbDbMapFile).getLines().drop(1)) {
       if (i > MIN_INDEX && i <= MAX_INDEX) {
         val lineArray = line.split(' ')
@@ -296,13 +164,10 @@ object GloboToDbpedia {
           
             if (isCorrect == true) {
               corrects += 1
-              buffer.append(line + '\n')
+              correctEntriesStream.println(line)              
             
-              if (j % 100 == 0 && !buffer.isEmpty) {
-                println ("Globo file current line = " + i)
-                appendToFile(output, buffer.toString.dropRight(1))
-    	        buffer.delete(0, buffer.length)
-    	        buffer = new StringBuilder
+              if (j % 100 == 0) {
+                println ("Globo file current line = " + i)                
               }
       
               j += 1
@@ -312,26 +177,18 @@ object GloboToDbpedia {
           case e: IOException => println("An error occurred while parsing this page!")
         }              
       } else if (i > MAX_INDEX) {
-        println("Corrects = " + corrects + " and incorrects = " + incorrects)
-        
-        if (!buffer.isEmpty) {
-          appendToFile(output, buffer.toString.dropRight(1))	
-        }
-        
-        System.exit(1)      
+        println("Done .")
+        println("Corrects = " + corrects + " and incorrects = " + incorrects) 
+        return             
       }
       i += 1
     }
     
-    println("Corrects = " + corrects + " and incorrects = " + incorrects)
-        
-    if (!buffer.isEmpty) {
-      appendToFile(output, buffer.toString.dropRight(1))	
-    }
+    println("Done .")
+    println("Corrects = " + corrects + " and incorrects = " + incorrects)         
   }
   
-  def generateGlbDbMapping(glbLabelsFile: String, dbpediaLabelsFile: String, output: String) {    
-    var buffer = new StringBuilder
+  def generateGlbDbMapping(glbLabelsFile: String, dbpediaLabelsFile: String, output: String) {        
     var i = 1
     var j = 1
         
@@ -340,6 +197,7 @@ object GloboToDbpedia {
     val dbThirdColumn = new ListBuffer[(String, Int)]
     
     var z = 0
+    val mappingStream = new PrintStream(new File(output))
     for (line <- Source.fromFile(dbpediaLabelsFile).getLines().drop(1)) {      
       val dbLineArray = line.split(" ",3)
       if (dbLineArray.length >= 3 && (dbLineArray(2)(1).toLower.toInt >= 97 && dbLineArray(2)(1).toLower.toInt <= 122)) {
@@ -356,15 +214,11 @@ object GloboToDbpedia {
       if (glbLineArray.length >= 3) {          
         dbThirdColumn.find((x: Tuple2[String, Int]) => x._1 == glbLineArray(2)) match {
           case Some(x) => {            
-            buffer.append(glbLineArray(0) + " <http://www.w3.org/2002/07/owl#sameAs> " + dbFirstColumn(x._2) + " .\n")
+            mappingStream.println(glbLineArray(0) + " <http://www.w3.org/2002/07/owl#sameAs> " + dbFirstColumn(x._2) + " .")
 	          
-            if (j % 100 == 0 && !buffer.isEmpty) {
-              println ("Globo file current line = " + i)
-              appendToFile(output, buffer.toString.dropRight(1))
-    	      buffer.delete(0, buffer.length)
-    	      buffer = new StringBuilder
-            }
-      
+            if (j % 100 == 0) {
+              println ("Globo file current line = " + i)              
+            }      
             j += 1
           }
           case None =>   
@@ -374,104 +228,7 @@ object GloboToDbpedia {
         i += 1
       }
     }
-    
-    if (!buffer.isEmpty) {
-      appendToFile(output, buffer.toString)	
-    }
 
     println("Done.")
-  }
-  
-  def generateGlbDbMapping2(labelsFile: String, output: String) {
-    var buffer = new StringBuilder
-    var auxLine = ""
-    var i = 1  
-    var j = 1
-      
-    for (line <- Source.fromFile(labelsFile).getLines()) {
-      if (i > 1) {
-        val lineArray = line.split(' ')
-        val auxLineArray = auxLine.split(' ')
-        if (lineArray.length >= 3 && auxLineArray.length >= 3) {
-          val label = lineArray(2).replaceAll(""""@pt""","").replaceFirst(""""""", "")                          
-          val auxLabel = auxLineArray(2).replaceAll(""""@pt""","").replaceFirst(""""""", "")          
-        
-          if (levenshtein(label, auxLabel) <= 3) {          
-          
-            if (lineArray(0).split('/')(0).contains("globo") && auxLineArray(0).split('/')(0).contains("dbpedia")) {
-              buffer.append(lineArray(0) + " <http://www.w3.org/2002/07/owl#sameAs> " + auxLineArray(0) + " .\n")
-            } else if (lineArray(0).split('/')(0).contains("dbpedia") && auxLineArray(0).split('/')(0).contains("globo")) {
-              buffer.append(auxLineArray(0) + " <http://www.w3.org/2002/07/owl#sameAs> " + lineArray(0) + " .\n")
-            }
-          
-            if (j % 10000 == 0 && !buffer.isEmpty) {
-        	  appendToFile(output, buffer.toString.dropRight(1))
-        	  buffer.delete(0, buffer.length)
-        	  buffer = new StringBuilder
-            }
-          
-            j += 1
-          }
-                
-    	  auxLine = line            
-        } else {
-          auxLine = line
-        }
-      }
-      
-      if (i % 100000 == 0) println (i + " lines processed.")
-      i += 1
-    }
-    
-    if (!buffer.isEmpty) {
-      appendToFile(output, buffer.toString)	
-    }
-
-    println("Done.")
-  }
-  
-  def generateGlbDbMapping3(glbLabelsFile: String, dbpediaLabelsFile: String, output: String) {
-    
-    var buffer = new StringBuilder
-    var i = 1
-    var j = 1
-    
-    val loop = new Breaks
-    
-    for (glbLine <- Source.fromFile(glbLabelsFile).getLines().drop(1)) {      
-      val glbLineArray = glbLine.split(" ",3)      
-      if (glbLineArray.length >= 3) {
-        loop.breakable {
-          for (line <- Source.fromFile(dbpediaLabelsFile).getLines().drop(1)) {            
-            val dbLineArray = line.split(" ",3)
-      
-            if (dbLineArray.length >= 3 && (dbLineArray(2)(1).toLower.toInt >= 97 && dbLineArray(2)(1).toLower.toInt <= 122)) {	                     
-              if (compare(glbLineArray(2)(1).toLower, dbLineArray(2)(1).toLower) == 0) {
-                if (glbLineArray(2) == dbLineArray(2)) {
-                  println("DB = " + dbLineArray(2))
-                  println("GLB = " + glbLineArray(2))
-                  println ("Globo file current line = " + i)
-                  buffer.append(glbLineArray(0) + " <http://www.w3.org/2002/07/owl#sameAs> " + dbLineArray(0) + " .\n")
-          
-                  if (j % 10000 == 0 && !buffer.isEmpty) {	              
-                    appendToFile(output, buffer.toString.dropRight(1))
-        	        buffer.delete(0, buffer.length)
-        	        buffer = new StringBuilder
-                  }
-          
-                  j += 1
-                  loop.break
-                }
-              } else if (compare(glbLineArray(2)(1).toLower, dbLineArray(2)(1).toLower) < 0) {                 
-                loop.break
-              }
-            }            
-          }          
-        }
-    
-        if (i % 10000 == 0) println (i + " lines processed.")
-        i += 1
-      }
-    }
   }
 }

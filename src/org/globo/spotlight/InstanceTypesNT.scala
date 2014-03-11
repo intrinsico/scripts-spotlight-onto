@@ -12,7 +12,7 @@ object InstanceTypesNT {
   def generateInstanceTypesNT(typesResults: ResultSet, output: String) {           
     val typesStream = new PrintStream(new File(output))            
     
-    var i = 0
+    var i = 1
     println("Generating the instance types file...")
     if (typesResults.hasNext) {
       println("Creating Instance Types file...")
