@@ -31,34 +31,27 @@ import org.apache.commons.lang.StringEscapeUtils
 
 object FileUtils {  
   
-  def convertFormat(aFile: String, output: String) {
+  // Converts and input file to a given format
+  def convertFormat(aFile: String, output: String, format: String) {
+    val formatStream = new PrintStream(new File(output))
     
-    implicit val codec = Codec("iso-8859-1")    
+    implicit val codec = Codec(format)    
     codec.onMalformedInput(CodingErrorAction.REPLACE)
-    codec.onUnmappableCharacter(CodingErrorAction.IGNORE)
-    var buffer = new StringBuilder
+    codec.onUnmappableCharacter(CodingErrorAction.REPLACE)    
     var i = 1
     
     for (line <- Source.fromFile(aFile).getLines()) {
-      try {
-        buffer.append(new String(line.getBytes("iso-8859-1")))
-        buffer.append("\n")
+      try {        
+        formatStream.println(new String(line.getBytes(format)))
         
-        if (i % 100000 == 0 && !buffer.isEmpty) {
-          println ("Globo file current line = " + i)
-          appendToFile(output, buffer.toString.dropRight(1))
-    	  buffer.delete(0, buffer.length)
-    	  buffer = new StringBuilder
+        if (i % 100000 == 0) {
+          println ("Globo file current line = " + i)          
         }
       } catch {
         case e: IOException => println("An error occurred while parsing this string!")
       }
       
       i += 1
-    }
-    
-    if (!buffer.isEmpty) {
-      appendToFile(output, buffer.toString)	
     }
   }
   
@@ -119,8 +112,6 @@ object FileUtils {
     implicit val codec = Codec("iso-8859-1")    
     codec.onMalformedInput(CodingErrorAction.IGNORE)
     codec.onUnmappableCharacter(CodingErrorAction.IGNORE)
-	//codec.onMalformedInput(CodingErrorAction.REPLACE)
-    //codec.onUnmappableCharacter(CodingErrorAction.REPLACE)
     
     println("Generating a single dataset file.")    
     var i = 1    

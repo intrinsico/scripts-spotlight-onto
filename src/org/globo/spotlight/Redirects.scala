@@ -22,39 +22,31 @@ package org.globo.spotlight
 
 import com.hp.hpl.jena.rdf.model.StmtIterator
 import org.globo.spotlight.util.FileUtils._
+import java.io._
 
 object Redirects {
   private val PREDICATE_LABEL = "http://www.w3.org/2002/07/owl#sameAs"
   private val REDIRECTS_PREFIX = "http://semantica.globo.com/wikiPageRedirects"  
   
-  def generateRedirectsFile(it: StmtIterator, outputFile: String) {
-    var buffer = new StringBuilder            
-    //appendToFile(output, buffer)
+  def generateRedirectsFile(it: StmtIterator, output: String) {
+    val redirectsStream = new PrintStream(new File(output))    
 
-    var i = 0
+    var i = 1
     println("Creating redirects file...")
-    while (it.hasNext()) {
-
-      if (i % 10000 == 0) println (i + " lines processed.")
-      
+    while (it.hasNext()) {           
       val stmt = it.nextStatement()
       val subject = stmt.getSubject()
       val predicate = stmt.getPredicate()
       val obj = stmt.getObject()      
 
       if (predicate.toString().equals(PREDICATE_LABEL)) {
-        buffer.append("<%s> <%s> <%s> .\n".format(subject, REDIRECTS_PREFIX, obj))
-      }
+        redirectsStream.println("<" + subject + "> <" + REDIRECTS_PREFIX + "> <" + obj + "> .")
+      }       
       
-      if (i != 0 && i % 1000000 == 0 && !buffer.isEmpty) {
-        appendToFile(outputFile, buffer.toString.dropRight(1))
-        buffer.delete(0, buffer.length)
-        buffer = new StringBuilder
-      } 
-      
+      if (i % 10000 == 0) println (i + " lines processed.")
       i += 1
     }
-    appendToFile(outputFile, buffer.toString.dropRight(1))
+    println("Done .")
   }
   
   def generateRedirects(it: StmtIterator, outputDir: String) {    

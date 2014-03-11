@@ -39,7 +39,41 @@ object JenaUtils {
     val qexec = QueryExecutionFactory.create(query, aModel)
     qexec.execSelect()
   }
-    
+  
+  def buildQueryRDFLabelsWithTypesPOP(): String = {      
+    "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>" + '\n' +
+    "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>" + '\n' +    
+    "PREFIX place: <http://semantica.globo.com/place/>" + '\n' +
+    "PREFIX person:	<http://semantica.globo.com/person/>" + '\n' +
+    "PREFIX organization: <http://semantica.globo.com/organization/>" + '\n' +
+    "PREFIX base: <http://semantica.globo.com/base/>" + '\n' +
+    "PREFIX esportes: <http://semantica.globo.com/esportes/>" + '\n' +
+    "SELECT ?class ?lugar ?pessoa ?org ?o ?nc ?apel" + '\n' +    
+    "WHERE {" +
+      "{ " +
+        "?class rdfs:subClassOf* place:Place . " +
+        "?lugar rdf:type ?class . " +
+        "?lugar rdfs:label ?o . " +
+        "OPTIONAL { ?lugar base:nome_completo ?nc . } . " +        
+      "} " +
+      "UNION " +
+      "{ " +
+        "?class rdfs:subClassOf* person:Person . " +
+        "?pessoa rdf:type ?class . " +
+        "?pessoa rdfs:label ?o . " +
+        "OPTIONAL { ?pessoa base:nome_completo ?nc . } . " +
+        "OPTIONAL { ?atleta base:desempenhado_por ?pessoa . ?atleta esportes:nome_popular_sde ?apel . } . " +
+      "} " +
+      "UNION " +
+      "{ " +
+        "?class rdfs:subClassOf* organization:Organization . " +
+        "?org rdf:type ?class . " +
+        "?org rdfs:label ?o . " +
+        "OPTIONAL { ?org base:nome_completo ?nc . } . " +        
+      "} " +      
+    "}"
+  }    
+  
   def buildQueryRDFTypes(): String = {    
     "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>" + '\n' +    
     "SELECT ?s ?o " + '\n' +
@@ -54,7 +88,7 @@ object JenaUtils {
   
   def loadFileToJena(turtleFile: String, tdbPath: String): Model = {
     val in = new BufferedInputStream(new FileInputStream(turtleFile))    
-    val charsetDecoder = Charset.forName("iso-8859-1").newDecoder()        
+    val charsetDecoder = Charset.forName("utf-8").newDecoder()        
     
 	charsetDecoder.onMalformedInput(CodingErrorAction.REPLACE)
 	charsetDecoder.onUnmappableCharacter(CodingErrorAction.REPLACE)

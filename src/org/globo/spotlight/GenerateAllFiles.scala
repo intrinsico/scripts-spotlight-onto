@@ -44,9 +44,9 @@ object GenerateAllFiles {
       
       // Creates all folders we are going to need
       createDir(base_dir)
-      createDir(base_dir + "/turtle_files/")      
-      createDir(base_dir + "/output_ori/")
-      createDir(base_dir + "/TDB/")
+      createDir(inputDir)      
+      createDir(outputDir)
+      createDir(tdbDir)
             
       val file = new File(inputDir)      
       if(file.isDirectory()) { 
@@ -63,33 +63,18 @@ object GenerateAllFiles {
       org.apache.commons.io.FileUtils.cleanDirectory(new java.io.File(tdbDir))
     
       // Combines all globo files into one .ttl
-      //generateDataset(inputDir, inputDir + turtleFile)
-      // Converts the dataset to iso
-      //convertFormat(inputDir + "/" + turtleFile, inputDir + "/test.ttl")      
+      generateDataset(inputDir, inputDir + turtleFile)      
     
       ////////////////////////////////////////////////////// LABELS ///////////////////////////////////////////////
-      //val globoModel = loadFileToJena(inputDir + turtleFile, tdbDir)            
+      val globoModel = loadFileToJena(inputDir + turtleFile, tdbDir)            
       //val it = globoModel.listStatements()
-      //LabelsNT.generateLabelsNT(it, outputDir + "labels_globo.nt")
+      val labelsQuery = buildQueryRDFLabelsWithTypesPOP()
+      val labelsResults = executeQuery(labelsQuery, globoModel)
+      println("Done.")
+      //LabelsNT.generateLabelsTSV(labelsResults, outputDir + "labels_globo.tsv")
+      LabelsNT.generateLabelsNT(labelsResults, outputDir + "labels_globo.nt")     
       
-      // Since Jena cannot read various subjects in the format <SOME_SUBJECT> we need to do extra processing
-      // awk -F '\t' '$2 ~ /label/{print}' globo_dataset.ttl > labels_test.ttl
-      // awk -F '\t' '$1 ~ /</{print}' labels_test.ttl > labels_missing.ttl
-      // awk -F '\t' '{ gsub("\" .","\"@pt .",$3); print $1" <http:\/\/www.w3.org\/2000\/01/rdf-schema#label> "$3}' labels_missing.ttl >> labels_globo.nt
-      // cat labels_globo.nt >> labels_pt.nt
-      // sort -u labels_pt.nt > unique_labels_pt.nt
-      // awk -F '\t' '!x[$1]++' unique_labels_pt.nt > labels_pt.nt
-      
-      //For the final part, clean all invalid entries in the labels file
-      // Removing lines with special characters from the labels themselves and labels with length size one      
-      // awk -F '"' '{if ((length($2) != 1) && ($2 !~ /(^|[^\\])[][|{}()!?+*.%$^]/)) print}' labels_pt.nt > tmp_labels_pt.nt
-      // LabelsNT.filterLabelsWithStopwords(base_dir + "/tmp_labels_pt.nt", "E:/Spotlight/data/resources/pt/stopwords.list", base_dir + "/tmp2_labels_pt.nt")
-      
-      // Convert the final file to utf-8 in case its not already in that encoding
-      // iconv tmp2_labels_pt.nt -f iso-8859-1 -t utf-8 > tmp3_labels_pt.nt
-      // rm tmp_labels_pt.nt
-      // rm tmp2_labels_pt.nt
-      // mv tmp3_labels_pt.nt labels_pt.nt
+      // Compress the final file
       // bzip2 -k labels_pt.nt
       
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -134,27 +119,7 @@ object GenerateAllFiles {
       //GloboToDbpedia.generateGlbDbMapping2(outputDir + "labels_final.nt", outputDir + "globo_map_dbpedia.nt")
      
       // Get or tries to get only the correct mapping from the Globo -> Wikipedia mapping
-      //GloboToDbpedia.getCorrectEntries(outputDir + "sorted_globo_map_dbpedia.nt", outputDir + "globo_final_map_dbpedia.nt")      
-      
-      // Generates the first utf globo_occs
-      // sort -t$'\t' -k2 occs.tsv > occs.uriSorted.tsv 
-      //GloboToDbpedia.filterOccs(outputDir + "globo_final_map_dbpedia.nt", "E:/Spotlight/data/output/pt/occs_uriSorted.tsv" , outputDir + "occs_globo_0.tsv")      
-      //fixOccs(outputDir + "occs_globo_0.tsv", outputDir + "occs_globo_1.tsv")
-      
-      // Generates the first video based globo occs
-      //fixOccs("E:/Spotlight/data/output/pt/occs_uriSorted.tsv", outputDir + "final_occs_uriSorted.tsv")
-      //VideosNT.complementEntities(outputDir + "videos_dataset.ttl", outputDir + "final_occs_noNumber_uriSorted.tsv", outputDir, outputDir + "occs_globo_1.tsv")
-            
-      // Generates the final occs with extra column
-      // cat occs_globo_1.tsv videos_occs.tsv > occs_globo_2.tsv
-      // sort -u occs_globo_2.tsv > occs_globo_2_sorted.tsv
-      
-      // Because of encoding problems the sort might not filter duplicates, use awk also
-      // awk -F '\t' '!x[$1]++' occs_globo_2_sorted.tsv > sorted_occs_globo_2.tsv
-      
-      // cat occs.tsv sorted_occs_globo_2.tsv > test.tsv
-      // sort test.tsv > sorted_test.tsv
-      //GloboToDbpedia.addColumnToOccs(outputDir + "sorted_test.tsv", outputDir + "occs_globo_3.tsv")
+      //GloboToDbpedia.getCorrectEntries(outputDir + "sorted_globo_map_dbpedia.nt", outputDir + "globo_final_map_dbpedia.nt")                 
     }
   }
 }

@@ -29,120 +29,118 @@ import scala.io.Codec
 import scala.io.Source
 import com.hp.hpl.jena.rdf.model.{StmtIterator, Model}
 import com.hp.hpl.jena.query.ResultSetFormatter
+import com.hp.hpl.jena.query.ResultSet
 
 object LabelsNT {
 
   private val PREDICATE_LABEL = "http://www.w3.org/2000/01/rdf-schema#label"
   private val OBJECT_LABEL = "http://xmlns.com/foaf/0.1/Person"
   private val INSERT_SPACE_UPPERCASE = "(\\p{Ll})(\\p{Lu})"         
-    
-  def generateLabelsJena(aModel: Model, output: String) {
-    
-    implicit val codec = Codec("iso-8859-1")    
-    codec.onMalformedInput(CodingErrorAction.IGNORE)
-    codec.onUnmappableCharacter(CodingErrorAction.IGNORE)
-    
-    val labelsQuery = buildQueryLabels()    
-    val it = executeQuery(labelsQuery, aModel)
-    val aList = ResultSetFormatter.toList(it)
-    val aListIt = aList.iterator()
-
-    
-    var buffer = new StringBuilder
+  
+  def generateLabelsNT(labelsResults: ResultSet, output: String) {
+    val labelsStream = new PrintStream(new File(output))
     
     var i = 1
-    println("Creating labels file...")
-    while (aListIt.hasNext()) {
-    //while (it.hasNext()) {
-      
-      if (i % 100000 == 0) println (i + " lines processed.")
-            
-      //val next = it.next()
-      val next = aListIt.next()
-      val subject = next.get("s")      
-      //val obj = new String (next.get("o").toString.getBytes("utf-8"))
-      //val obj = new String (next.get("o").toString.getBytes("utf-8"), "iso-8859-1")
-      val obj = next.get("o")
-      //val obj = next.getLiteral("o").toString
-      
-      buffer.append("<" + subject + ">\t<http://www.w3.org/2000/01/rdf-schema#label>\t" + """"""" + obj + """"""" + "@pt .\n")           
-            
-      if (i % 1000000 == 0 && !buffer.isEmpty) {
-        appendToFile(output, buffer.toString.dropRight(1))
-        buffer.delete(0, buffer.length)
-        buffer = new StringBuilder
-      } 
-      
-      i += 1            
-    }
-    
-    if (!buffer.isEmpty) {
-      appendToFile(output, buffer.toString.dropRight(1))
-    }
-  }  
-    
-  def generateLabelsNT(it: StmtIterator, output: String) {             
-    
-    var buffer = new StringBuilder        
-    buffer.append("# started ".concat(new Date().toString()).concat("\n"))
-    //appendToFile(output, buffer)
-
-    var i = 0
-    println("Creating labels file...")
-    while (it.hasNext()) {
-
-      if (i % 100000 == 0) println (i + " lines processed.")
-      
-      val stmt = it.nextStatement()
-      val subject = stmt.getSubject()
-      val predicate = stmt.getPredicate()
-      val obj = stmt.getObject()
-      val language = "@pt" //stmt.getLanguage()??
-
-      if (predicate.toString().equals(PREDICATE_LABEL)) {
-
-        val surfaceForm = obj.toString().replace("@pt", "")
+    if (labelsResults.hasNext) {
+      println("Creating Labels file, NT format...")
+      // Iterating the ResultSet to get all its elements
+      while (labelsResults.hasNext) {        
+        val currentSolution = labelsResults.nextSolution()
+        // Default object value is the label
+        var label = currentSolution.get("o")
+        var subject  = ""
+          
+        // Is it a person?          
+        if (currentSolution.get("pessoa") != null) {
+          // Is it an athlete?
+          if (currentSolution.get("apel") != null) {
+            label = currentSolution.get("apel")
+          } else {
+            // Has full name?
+            if (currentSolution.get("nc") != null) {
+              label = currentSolution.get("nc")
+            }
+          }
+          subject = currentSolution.get("pessoa").toString()
+        // Is it a place?
+        } else if (currentSolution.get("lugar") != null) {          
+          subject = currentSolution.get("lugar").toString()
+        // Is it an organization?
+        } else {
+          if (currentSolution.get("nc") != null) {
+            label = currentSolution.get("nc")
+          }
+          subject = currentSolution.get("org").toString()
+        }        
         
-        val tmpString = "<%s> <%s> \"%s\"%s .\n".format(subject, predicate, surfaceForm, language)
-        buffer.append(tmpString)
-
-        val label = subject.toString().split("/")
-        val name = label(label.size - 1).replaceAll(INSERT_SPACE_UPPERCASE, "$1 $2")
-
-        if (!tmpString.contains("<%s> <%s> \"%s\"%s .\n".format(subject, predicate, name, language))) {
-          buffer.append("<%s> <%s> \"%s\"%s .\n".format(subject, predicate, name, language))
-          //appendToFile(output, buffer)
-        }
-
-        if (!tmpString.contains("<%s> <%s> \"%s\"%s .\n".format(subject, predicate, label(label.size - 1), language))) {
-          buffer.append("<%s> <%s> \"%s\"%s .\n".format(subject, predicate, label(label.size - 1), language))
-          //appendToFile(output, buffer)
-        }
-
-      } else if (obj.toString().equalsIgnoreCase(OBJECT_LABEL)) {
-
-        val label = subject.toString().split("/")
-        val name = label(label.size - 1).replaceAll(INSERT_SPACE_UPPERCASE, "$1 $2")
-        buffer.append("<%s> <%s> \"%s\"@en .\n".format(subject, PREDICATE_LABEL, name))        
-      }
-      
-      if (i != 0 && i % 1000000 == 0 && !buffer.isEmpty) {
-        appendToFile(output, buffer.toString.dropRight(1))
-        buffer.delete(0, buffer.length)
-        buffer = new StringBuilder
-      } 
-      
-      i += 1
+        // Final format according to the subject
+        labelsStream.println("<" + subject + "> <http://www.w3.org/2000/01/rdf-schema#label> " + """"""" + label + """"@pt .""") 
+        
+        if (i % 100000 == 0) {
+	      println(i + " results processed...")
+	    }
+        i += 1
+      }      
+      println("Done.")
+    } else {
+      println("No results for the labels file query.")
     }
-    appendToFile(output, buffer.toString.dropRight(1))	
-    //FileUtils.writeToFile(output, buffer.toString)
-
-    println("Done.")
+  }
+  
+  def generateLabelsTSV(labelsResults: ResultSet, output: String) {
+    val labelsStream = new PrintStream(new File(output))
+    
+    var i = 1
+    if (labelsResults.hasNext) {
+      println("Creating Labels file, TSV format...")
+      // Iterating the ResultSet to get all its elements
+      while (labelsResults.hasNext) {        
+        val currentSolution = labelsResults.nextSolution()
+        // Default object value is the label
+        var label = currentSolution.get("o")
+        var subject  = ""
+          
+        // Is it a person?          
+        if (currentSolution.get("pessoa") != null) {
+          // Is it an athlete?
+          if (currentSolution.get("apel") != null) {
+            label = currentSolution.get("apel")
+          } else {
+            // Has full name?
+            if (currentSolution.get("nc") != null) {
+              label = currentSolution.get("nc")
+            }
+          }
+          subject = currentSolution.get("pessoa").toString()
+        // Is it a place?
+        } else if (currentSolution.get("lugar") != null) {          
+          subject = currentSolution.get("lugar").toString()
+        // Is it an organization?
+        } else {
+          if (currentSolution.get("nc") != null) {
+            label = currentSolution.get("nc")
+          }
+          subject = currentSolution.get("org").toString()
+        }
+        
+        // Final format according to the subject
+        labelsStream.println(subject + "\t" + label) 
+        
+        if (i % 100000 == 0) {
+	      println(i + " results processed...")
+	    }
+        i += 1
+      }      
+      println("Done.")
+    } else {
+      println("No results for the labels file query.")
+    }
   }
   
   def filterLabelsWithStopwords(labelsFile: String, stopwordsFile: String, outputFile: String) {
     val stopwordsSet = Source.fromFile(stopwordsFile).getLines().toSet
     
+    println("Filtering a labels file in the NT format with a stopwords file...")
     val labelsStream = new PrintStream(new File(outputFile))
     for (line <- Source.fromFile(labelsFile).getLines()) {
       val lineArray = line.split(""""""")      
@@ -153,5 +151,6 @@ object LabelsNT {
         }
       }
     }
+    println("Done.")
   }
 }
