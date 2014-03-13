@@ -22,7 +22,7 @@ package org.globo.spotlight
 
 import org.globo.spotlight.util.FileUtils._
 import org.globo.spotlight.util.JenaUtils._
-import org.apache.commons.io
+import org.apache.commons.io.FileUtils._
 import java.io._
 import scala.io.Source
 
@@ -48,30 +48,30 @@ object GenerateAllFiles {
       createDir(outputDir)
       createDir(tdbDir)
             
-      val file = new File(inputDir)      
-      if(file.isDirectory()) { 
-		if(file.list().length == 0){
-		  println("Please put all the .ttl extension files from the globo dataset inside the folder " + inputDir)
-		  System.exit(1)
-		}
-      } else {
-        println("Please use a valid input directory.")
-        System.exit(1)
-      }
+      //val file = new File(inputDir)      
+      //if(file.isDirectory()) { 
+	  //	if(file.list().length == 0){
+	  //	  println("Please put all the .ttl extension files from the globo dataset inside the folder " + inputDir)
+	  //	  System.exit(1)
+	  //	}
+      //} else {
+      //  println("Please use a valid input directory.")
+      //  System.exit(1)
+      //}
                
       // Clean the current TDB folder so we don't receive a null pointer exception
-      org.apache.commons.io.FileUtils.cleanDirectory(new java.io.File(tdbDir))
+      cleanDirectory(new java.io.File(tdbDir))
     
       // Combines all globo files into one .ttl
-      generateDataset(inputDir, inputDir + turtleFile)      
+      //generateDataset(inputDir, inputDir + turtleFile)      
     
       ////////////////////////////////////////////////////// LABELS ///////////////////////////////////////////////
       val globoModel = loadFileToJena(inputDir + turtleFile, tdbDir)                  
       val labelsQuery = buildQueryRDFLabelsWithTypesPOP()
       val labelsResults = executeQuery(labelsQuery, globoModel)
       println("Done.")
-      //LabelsNT.generateLabelsTSV(labelsResults, outputDir + "labels_globo.tsv")
-      LabelsNT.generateLabelsNT(labelsResults, outputDir + "labels_globo.nt")     
+      LabelsNT.generateLabelsTSV(labelsResults, outputDir + "surfaceForms-globo.tsv")
+      //LabelsNT.generateLabelsNT(labelsResults, outputDir + "labels_globo.nt")     
       
       // Compress the final file
       // bzip2 -k labels_pt.nt

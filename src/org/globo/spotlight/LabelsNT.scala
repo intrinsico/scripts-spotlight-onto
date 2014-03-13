@@ -47,18 +47,18 @@ object LabelsNT {
       while (labelsResults.hasNext) {        
         val currentSolution = labelsResults.nextSolution()
         // Default object value is the label
-        var label = currentSolution.get("o")
+        var label = currentSolution.get("o").toString()
         var subject  = ""
           
         // Is it a person?          
         if (currentSolution.get("pessoa") != null) {
           // Is it an athlete?
           if (currentSolution.get("apel") != null) {
-            label = currentSolution.get("apel")
+            label = currentSolution.get("apel").toString()
           } else {
             // Has full name?
             if (currentSolution.get("nc") != null) {
-              label = currentSolution.get("nc")
+              label = currentSolution.get("nc").toString()
             }
           }
           subject = currentSolution.get("pessoa").toString()
@@ -68,7 +68,7 @@ object LabelsNT {
         // Is it an organization?
         } else {
           if (currentSolution.get("nc") != null) {
-            label = currentSolution.get("nc")
+            label = currentSolution.get("nc").toString()
           }
           subject = currentSolution.get("org").toString()
         }        
@@ -97,18 +97,18 @@ object LabelsNT {
       while (labelsResults.hasNext) {        
         val currentSolution = labelsResults.nextSolution()
         // Default object value is the label
-        var label = currentSolution.get("o")
+        var label = currentSolution.get("o").toString()
         var subject  = ""
           
         // Is it a person?          
         if (currentSolution.get("pessoa") != null) {
           // Is it an athlete?
           if (currentSolution.get("apel") != null) {
-            label = currentSolution.get("apel")
+            label = currentSolution.get("apel").toString()
           } else {
             // Has full name?
             if (currentSolution.get("nc") != null) {
-              label = currentSolution.get("nc")
+              label = currentSolution.get("nc").toString()
             }
           }
           subject = currentSolution.get("pessoa").toString()
@@ -118,13 +118,13 @@ object LabelsNT {
         // Is it an organization?
         } else {
           if (currentSolution.get("nc") != null) {
-            label = currentSolution.get("nc")
+            label = currentSolution.get("nc").toString()
           }
           subject = currentSolution.get("org").toString()
         }
         
         // Final format according to the subject
-        labelsStream.println(subject + "\t" + label) 
+        labelsStream.println(label + "\t" + subject) 
         
         if (i % 100000 == 0) {
 	      println(i + " results processed...")

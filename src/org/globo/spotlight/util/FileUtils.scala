@@ -121,8 +121,9 @@ object FileUtils {
       println("Done.")
       i += 1
     }
-  }
+  } 
   
+  // Testar proprocess estava com í e Í
   def preprocessTurtle(turtleFile: String, outputFile: String) {
       
     implicit val codec = Codec("UTF-8")    
@@ -148,8 +149,8 @@ object FileUtils {
             val auxString0 = new String(testArray(0).getBytes("UTF-8"))
             val auxString2 = new String(testArray(2).getBytes("UTF-8"))
             if (auxString0.contains("ï¿½") || (auxString2.contains("ï¿½") && auxString2.count(_ == '\"') == 0)) {
-              testArray(0) = auxString0.replaceAll("_ï¿½", "_Í").replaceAll("ï¿½", "í")
-              testArray(2) = auxString2.replaceAll("_ï¿½", "_Í").replaceAll("ï¿½", "í")
+              testArray(0) = auxString0.replaceAll("\\_ï¿½", "_U+00CD").replaceAll("\\ï¿½", "\\U+00ED")
+              testArray(2) = auxString2.replaceAll("\\_ï¿½", "_U+00CD").replaceAll("\\ï¿½", "\\U+00ED")
               buffer.append(testArray(0) + '\t' + testArray(1) + '\t' + testArray(2) + '\n')
             } else {            
               buffer.append(currentString.replaceAll("\n", "") + '\n')            

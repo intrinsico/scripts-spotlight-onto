@@ -67,8 +67,9 @@ object Wiki {
     title match {
       case t if (t.contains("G1") && t.contains("|") && (t.split("\\|").length == 2)) => {               
         returnValue = ""        
-      }
-      case t if (t.contains("G1") && t.contains("|") && t.contains("Político")) => {                        
+      }      
+      // Testar esse case! tava com acento
+      case t if (t.contains("G1") && t.contains("|") && t.contains("Pol\\U+00EDtico")) => {                        
         if(!document.select("div.widget-ficha-candidato").isEmpty()) returnValue = document.select("div.widget-ficha-candidato").first().text() else returnValue = ""        
       }
       case t if (t.contains("G1") && t.contains("Educa")) => {                        
