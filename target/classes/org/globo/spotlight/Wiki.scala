@@ -60,9 +60,9 @@ object Wiki {
   def getCorrectContext(document: org.jsoup.nodes.Document): String = {
     val DEFAULT_ENCODING = "iso-8859-1"
     
-    val encBytes = document.title().replaceAll("&","e").getBytes(DEFAULT_ENCODING)
-	  val title = getCorrectString(new String(encBytes, "UTF-8"), new String(encBytes, DEFAULT_ENCODING))
-	  var returnValue = ""
+    var encBytes = document.title().replaceAll("&","e").getBytes(DEFAULT_ENCODING)	      	                     
+	val title = getCorrectString(new String(encBytes, "UTF-8"), new String(encBytes, DEFAULT_ENCODING))
+	var returnValue = ""    	
 	  
     title match {
       case t if (t.contains("G1") && t.contains("|") && (t.split("\\|").length == 2)) => {               
@@ -275,7 +275,7 @@ object Wiki {
 		    buffer.append("\t</page>\n")		      		  
 	          
 	        if (i % 200 == 0 && !buffer.isEmpty) {
-		      appendToFile(outputFile, buffer.toString().dropRight(1))
+		      appendToFile(outputFile, buffer.toString.dropRight(1))
 		      buffer.delete(0, buffer.length)
 		      buffer = new StringBuilder
 	        }   
@@ -290,6 +290,6 @@ object Wiki {
 
     buffer.append("</mediawiki>")
     
-    appendToFile(outputFile, buffer.toString())
+    appendToFile(outputFile, buffer.toString)    
   }
 }

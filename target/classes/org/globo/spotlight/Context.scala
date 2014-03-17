@@ -111,7 +111,7 @@ object Context {
         val URLpath = lineArray(2).dropRight(1).reverse.dropRight(1).reverse
 
         try {
-          val document = Jsoup.connect(URLpath).header().get()
+          val document = Jsoup.connect(URLpath).get()
           titlesStream.println(resource + '\t' + URLpath + '\t' + Wiki.getCorrectTitle(document.title()))
         } catch {
           case e: IOException => println("Error processing this page: " + URLpath)

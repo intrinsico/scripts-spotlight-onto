@@ -112,12 +112,8 @@ object GenerateAllFiles {
       //Wiki.generateWikiHTML(outputDir + "context_globo.ttl", outputDir + "globo_dump.xml")
       //Wiki.generateWikiJena(outputDir + "permalinks_globo.ttl", outputDir + "globo_dump.xml", globoModel)
 
-      // Get Globo titles so we can save the full URIs from the Globo resources when saving the occs file
       Context.generateContextTitles(outputDir + "permalinks_globo.ttl", outputDir + "globo_titles.tsv")
-
-      // Generate the oocs file
-      ExtractOccsFromGlobo.saveOccsFile(outputDir + "globo_dump.xml", outputDir + "globo_titles.tsv", outputDir + "occs_globo.tsv")
-
+      
       // Generate the Globo DBpedia mapping      
       //GloboToDbpedia.generateGlbDbMapping(outputDir + "labels_globo.nt", outputDir + "sorted_labels_pt.nt", outputDir + "globo_map_dbpedia.nt")      
      
