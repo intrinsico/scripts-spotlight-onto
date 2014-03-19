@@ -2,48 +2,28 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b1b46237-bee2-4cf5-9d8a-949336042508" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/org/globo/spotlight/ExtractOccsFromGlobo.scala" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Globo_Converter.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_thoughtworks_paranamer_paranamer_2_4_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_codec_commons_codec_1_6.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_io_commons_io_2_4.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_lang_commons_lang_2_5.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__log4j_log4j_1_2_16.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__net_liftweb_lift_json_2_9_2_2_5_M1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_httpcomponents_httpclient_4_2_3.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_httpcomponents_httpcore_4_2_2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_jena_jena_arq_2_11_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_jena_jena_core_2_11_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_jena_jena_iri_1_0_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_jena_jena_tdb_1_0_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_jsoup_jsoup_1_7_3.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_scala_lang_scala_compiler_2_9_2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_scala_lang_scala_compiler_bundle_2_9_2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_scala_lang_scala_library_2_9_2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_scala_lang_scalap_2_9_2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_jcl_over_slf4j_1_6_4.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_api_1_6_4.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_log4j12_1_6_4.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__xerces_xercesImpl_2_11_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__xml_apis_xml_apis_1_4_01.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/estados.list" afterPath="$PROJECT_DIR$/resources/estados.list" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/highlighting.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/globo/spotlight/Context.scala" afterPath="$PROJECT_DIR$/src/org/globo/spotlight/Context.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/globo/spotlight/util/FileUtils.scala" afterPath="$PROJECT_DIR$/src/org/globo/spotlight/util/FileUtils.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/globo/spotlight/ExtractOccsFromGlobo.scala" afterPath="$PROJECT_DIR$/src/org/globo/spotlight/ExtractOccsFromGlobo.scala" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/globo/spotlight/GenerateAllFiles.scala" afterPath="$PROJECT_DIR$/src/org/globo/spotlight/GenerateAllFiles.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/globo/spotlight/GloboToDbpedia.scala" afterPath="$PROJECT_DIR$/src/org/globo/spotlight/GloboToDbpedia.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/globo/spotlight/LabelsNT.scala" afterPath="$PROJECT_DIR$/src/org/globo/spotlight/LabelsNT.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/globo/spotlight/InstanceTypesNT.scala" afterPath="$PROJECT_DIR$/src/org/globo/spotlight/InstanceTypesNT.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/globo/spotlight/util/JenaUtils.scala" afterPath="$PROJECT_DIR$/src/org/globo/spotlight/util/JenaUtils.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/org/globo/spotlight/Wiki.scala" afterPath="$PROJECT_DIR$/src/org/globo/spotlight/Wiki.scala" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.settings/org.eclipse.jdt.core.prefs" afterPath="$PROJECT_DIR$/.settings/org.eclipse.jdt.core.prefs" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Globo_Converter.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="b1b46237-bee2-4cf5-9d8a-949336042508" time="1395076048906" ignored="false" />
-    <file path="/fragment.java" changelist="b1b46237-bee2-4cf5-9d8a-949336042508" time="1395067493916" ignored="false" />
+    <file path="/Dummy.txt" changelist="b1b46237-bee2-4cf5-9d8a-949336042508" time="1395231322298" ignored="false" />
+    <file path="/fragment.java" changelist="b1b46237-bee2-4cf5-9d8a-949336042508" time="1395241688525" ignored="false" />
     <file path="/GloboToDbpedia.scala" changelist="b1b46237-bee2-4cf5-9d8a-949336042508" time="1395081059620" ignored="false" />
-    <file path="/GenerateAllFiles.scala" changelist="b1b46237-bee2-4cf5-9d8a-949336042508" time="1395087590568" ignored="false" />
-    <file path="/ExtractOccsFromGlobo.scala" changelist="b1b46237-bee2-4cf5-9d8a-949336042508" time="1395088141689" ignored="false" />
-    <file path="/Context.scala" changelist="b1b46237-bee2-4cf5-9d8a-949336042508" time="1395081476139" ignored="false" />
-    <file path="/Wiki.scala" changelist="b1b46237-bee2-4cf5-9d8a-949336042508" time="1395084783899" ignored="false" />
+    <file path="/GenerateAllFiles.scala" changelist="b1b46237-bee2-4cf5-9d8a-949336042508" time="1395240216459" ignored="false" />
+    <file path="/ExtractOccsFromGlobo.scala" changelist="b1b46237-bee2-4cf5-9d8a-949336042508" time="1395240157501" ignored="false" />
+    <file path="/Context.scala" changelist="b1b46237-bee2-4cf5-9d8a-949336042508" time="1395160176014" ignored="false" />
+    <file path="/Wiki.scala" changelist="b1b46237-bee2-4cf5-9d8a-949336042508" time="1395232125336" ignored="false" />
+    <file path="/JenaUtils.scala" changelist="b1b46237-bee2-4cf5-9d8a-949336042508" time="1395234969514" ignored="false" />
+    <file path="/InstanceTypesNT.scala" changelist="b1b46237-bee2-4cf5-9d8a-949336042508" time="1395236583555" ignored="false" />
+    <file path="/README.md" changelist="b1b46237-bee2-4cf5-9d8a-949336042508" time="1395243573233" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -107,7 +87,34 @@
       <file leaf-file-name="GenerateAllFiles.scala" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/globo/spotlight/GenerateAllFiles.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="118" column="129" selection-start="5714" selection-end="5714" vertical-scroll-proportion="0.0">
+            <state line="41" column="40" selection-start="1426" selection-end="1426" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="README.md" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="69" column="57" selection-start="2281" selection-end="2281" vertical-scroll-proportion="0.11792453">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="InstanceTypesNT.scala" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/globo/spotlight/InstanceTypesNT.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="49" column="74" selection-start="2516" selection-end="2516" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="JenaUtils.scala" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/org/globo/spotlight/util/JenaUtils.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="80" column="26" selection-start="3176" selection-end="3182" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -116,21 +123,8 @@
       <file leaf-file-name="Context.scala" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/globo/spotlight/Context.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="113" column="56" selection-start="3664" selection-end="3664" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#762#784#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LabelsNT.scala" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/globo/spotlight/LabelsNT.scala">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="16" column="64" selection-start="726" selection-end="726" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#762#778#0" expanded="true" />
-              </folding>
+            <state line="93" column="53" selection-start="2997" selection-end="2997" vertical-scroll-proportion="0.0">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -139,18 +133,6 @@
         <entry file="file://$PROJECT_DIR$/src/org/globo/spotlight/GloboToDbpedia.scala">
           <provider selected="true" editor-type-id="text-editor">
             <state line="46" column="43" selection-start="1380" selection-end="1380" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-                <element signature="e#762#784#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="pom.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pom.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -159,19 +141,17 @@
       <file leaf-file-name="Wiki.scala" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/globo/spotlight/Wiki.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="277" column="52" selection-start="14230" selection-end="14230" vertical-scroll-proportion="-29.68">
+            <state line="224" column="36" selection-start="11383" selection-end="11383" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ExtractOccsFromGlobo.scala" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="ExtractOccsFromGlobo.scala" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/globo/spotlight/ExtractOccsFromGlobo.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="59" column="137" selection-start="1891" selection-end="1891" vertical-scroll-proportion="0.73960614">
-              <folding>
-                <element signature="e#182#204#0" expanded="true" />
-              </folding>
+            <state line="90" column="20" selection-start="2766" selection-end="2766" vertical-scroll-proportion="0.0">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -196,10 +176,13 @@
       <list>
         <option value="$PROJECT_DIR$/src/org/globo/spotlight/LabelsNT.scala" />
         <option value="$PROJECT_DIR$/src/org/globo/spotlight/GloboToDbpedia.scala" />
-        <option value="$PROJECT_DIR$/src/org/globo/spotlight/Context.scala" />
         <option value="$PROJECT_DIR$/src/org/globo/spotlight/Wiki.scala" />
-        <option value="$PROJECT_DIR$/src/org/globo/spotlight/GenerateAllFiles.scala" />
+        <option value="$PROJECT_DIR$/src/org/globo/spotlight/Context.scala" />
+        <option value="$PROJECT_DIR$/src/org/globo/spotlight/util/JenaUtils.scala" />
+        <option value="$PROJECT_DIR$/src/org/globo/spotlight/InstanceTypesNT.scala" />
         <option value="$PROJECT_DIR$/src/org/globo/spotlight/ExtractOccsFromGlobo.scala" />
+        <option value="$PROJECT_DIR$/src/org/globo/spotlight/GenerateAllFiles.scala" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -235,6 +218,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -295,7 +279,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
     </panes>
   </component>
@@ -313,6 +296,7 @@
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="restartRequiresConfirmation" value="true" />
     <property name="MemberChooser.showClasses" value="true" />
+    <property name="FullScreen" value="false" />
     <property name="GoToClass.includeLibraries" value="false" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
@@ -410,7 +394,7 @@
     <configuration default="false" name="GenerateAllFiles" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="org.globo.spotlight.GenerateAllFiles" />
       <option name="VM_PARAMETERS" value="-Xms2048m -Xmx8000m -Xss1536m" />
-      <option name="PROGRAM_PARAMETERS" value="E:/globo_resources globo.ttl" />
+      <option name="PROGRAM_PARAMETERS" value="E:/globo_resources globo_dataset.ttl" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" value="" />
@@ -459,7 +443,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1452" height="876" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -474,8 +458,8 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24964029" sideWeight="0.67176634" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32823366" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24964029" sideWeight="0.67315716" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32684284" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -548,6 +532,13 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/org/globo/spotlight/ExtractOccsFromGlobo.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="59" column="137" selection-start="1891" selection-end="1891" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/org/globo/spotlight/GenerateAllFiles.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state line="112" column="22" selection-start="5255" selection-end="5255" vertical-scroll-proportion="0.0">
@@ -558,10 +549,7 @@
     <entry file="file://$PROJECT_DIR$/src/org/globo/spotlight/GloboToDbpedia.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state line="134" column="72" selection-start="4269" selection-end="4269" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#762#784#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -575,9 +563,7 @@
     <entry file="file://$PROJECT_DIR$/src/org/globo/spotlight/ExtractOccsFromGlobo.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state line="11" column="4" selection-start="234" selection-end="234" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#182#204#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -588,68 +574,71 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/globo/spotlight/GloboToDbpedia.scala">
+    <entry file="file://$PROJECT_DIR$/src/org/globo/spotlight/Redirects.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="46" column="43" selection-start="1380" selection-end="1380" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#762#784#0" expanded="true" />
-          </folding>
-        </state>
+        <state line="26" column="7" selection-start="877" selection-end="877" vertical-scroll-proportion="-0.23394495" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/globo/spotlight/InstanceTypesNT.scala">
+    <entry file="file://$PROJECT_DIR$/src/org/globo/spotlight/LabelsNT.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="7" selection-start="242" selection-end="242" vertical-scroll-proportion="0.1607565">
+        <state line="16" column="64" selection-start="726" selection-end="726" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/globo/spotlight/Redirects.scala">
+    <entry file="file://$PROJECT_DIR$/src/org/globo/spotlight/GloboToDbpedia.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="7" selection-start="877" selection-end="877" vertical-scroll-proportion="-0.23394495">
+        <state line="46" column="43" selection-start="1380" selection-end="1380" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/globo/spotlight/Context.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="113" column="56" selection-start="3664" selection-end="3664" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#762#784#0" expanded="true" />
-          </folding>
+        <state line="93" column="53" selection-start="2997" selection-end="2997" vertical-scroll-proportion="0.0">
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/globo/spotlight/LabelsNT.scala">
+    <entry file="file://$PROJECT_DIR$/src/org/globo/spotlight/InstanceTypesNT.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="64" selection-start="726" selection-end="726" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#762#778#0" expanded="true" />
-          </folding>
+        <state line="49" column="74" selection-start="2516" selection-end="2516" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/globo/spotlight/util/JenaUtils.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="80" column="26" selection-start="3176" selection-end="3182" vertical-scroll-proportion="0.0">
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/globo/spotlight/Wiki.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="277" column="52" selection-start="14230" selection-end="14230" vertical-scroll-proportion="-29.68">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/globo/spotlight/GenerateAllFiles.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="118" column="129" selection-start="5714" selection-end="5714" vertical-scroll-proportion="0.0">
+        <state line="224" column="36" selection-start="11383" selection-end="11383" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/globo/spotlight/ExtractOccsFromGlobo.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="59" column="137" selection-start="1891" selection-end="1891" vertical-scroll-proportion="0.73960614">
-          <folding>
-            <element signature="e#182#204#0" expanded="true" />
-          </folding>
+        <state line="90" column="20" selection-start="2766" selection-end="2766" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/globo/spotlight/GenerateAllFiles.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="41" column="40" selection-start="1426" selection-end="1426" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="69" column="57" selection-start="2281" selection-end="2281" vertical-scroll-proportion="0.11792453">
+          <folding />
         </state>
       </provider>
     </entry>

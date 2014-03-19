@@ -87,7 +87,7 @@ object Context {
       }
       
       if (i != 0 && i % 50 == 0) {
-        appendToFile(outputFile, buffer.toString.dropRight(1))
+        appendToFile(outputFile, buffer.toString().dropRight(1))
         buffer.delete(0, buffer.length)
         buffer = new StringBuilder
       } 
@@ -111,7 +111,7 @@ object Context {
         val URLpath = lineArray(2).dropRight(1).reverse.dropRight(1).reverse
 
         try {
-          val document = Jsoup.connect(URLpath).header().get()
+          val document = Jsoup.connect(URLpath).get()
           titlesStream.println(resource + '\t' + URLpath + '\t' + Wiki.getCorrectTitle(document.title()))
         } catch {
           case e: IOException => println("Error processing this page: " + URLpath)

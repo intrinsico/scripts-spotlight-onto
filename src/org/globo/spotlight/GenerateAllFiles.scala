@@ -39,7 +39,7 @@ object GenerateAllFiles {
       val turtleFile = args(1)
                        
       val inputDir = base_dir + "/turtle_files2/"
-      val outputDir = base_dir + "/output_ori/"
+      val outputDir = base_dir + "/output/"
       val tdbDir = base_dir + "/TDB/"
       
       // Creates all folders we are going to need
@@ -66,11 +66,11 @@ object GenerateAllFiles {
       //generateDataset(inputDir, inputDir + turtleFile)      
     
       ////////////////////////////////////////////////////// LABELS ///////////////////////////////////////////////
-      //val globoModel = loadFileToJena(inputDir + turtleFile, tdbDir)                  
+      //val globoModel = loadFileToJena(inputDir + turtleFile, tdbDir)
       //val labelsQuery = buildQueryRDFLabelsWithTypesPOP()
       //val labelsResults = executeQuery(labelsQuery, globoModel)
       //println("Done.")
-      //LabelsNT.generateLabelsTSV(labelsResults, outputDir + "surfaceForms-globo.tsv")
+      //LabelsNT.generateLabelsTSV(labelsResults, outputDir + "surfaceForms-fromLabels-globo.tsv")
       //LabelsNT.generateLabelsNT(labelsResults, outputDir + "labels_globo.nt")     
       
       // Compress the final file
@@ -78,45 +78,33 @@ object GenerateAllFiles {
       
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////
       ///////////////////////////////////////////////// INSTANCE TYPES ////////////////////////////////////////////
-      /*
+
       // A query to find if the subject from the main language has any types in the instance types triples file
-      println("Querying for all entries with the types...")
-      val typesQuery = buildQueryRDFAllTypes()
-      val typesResults = executeQuery(typesQuery, globoModel)
-      println("Done.")
+      //println("Querying for entries with the types Person, Location and Organization...")
+      //val placeTypeQuery = buildQueryRDFPlaceType()
+      //val placeTypeResults = executeQuery(placeTypeQuery, globoModel)
+      //val personTypeQuery = buildQueryRDFPersonType()
+      //val personTypeResults = executeQuery(personTypeQuery, globoModel)
+      //val orgTypeQuery = buildQueryRDFOrgType()
+      //val orgTypeResults = executeQuery(orgTypeQuery, globoModel)
+      //println("Done.")
       
       // Generating the instance types file itself
-      InstanceTypesNT.generateInstanceTypesNT(typesResults, outputDir + "instance_types_globo.nt")
+      //InstanceTypesNT.generateInstanceTypesNT(placeTypeResults, personTypeResults, orgTypeResults, outputDir + "instance_types_globo.nt")
       
-      // Adds the DBpedia types of Person, Location and Organisation to the Globo respective entities
-      // awk -F ' ' '$3 ~ /Pessoa/{print}' instance_types_globo.ttl > pessoa.ttl
-      // awk -F ' ' '{print $1" "$2" <http://dbpedia.org/ontology/Person> ."}' pessoa.ttl > pessoa2.ttl
-      // awk -F ' ' '$3 ~ /Organizacao/{print}' instance_types_globo.ttl > organizacao.ttl
-      // awk -F ' ' '{print $1" "$2" <http://dbpedia.org/ontology/Organisation> ."}' organizacao.ttl > organizacao2.ttl
-      // awk -F ' ' '$3 ~ /Endereco/{print}' instance_types_globo.ttl >> lugar.ttl
-      // awk -F ' ' '$3 ~ /Regiao/{print}' instance_types_globo.ttl >> lugar.ttl
-      // awk -F ' ' '$3 ~ /Cidade/{print}' instance_types_globo.ttl >> lugar.ttl
-      // awk -F ' ' '$3 ~ /Pais/{print}' instance_types_globo.ttl >> lugar.ttl
-      // awk -F ' ' '$3 ~ /UF/{print}' instance_types_globo.ttl >> lugar.ttl
-      // awk -F ' ' '$3 ~ /AcidenteGeografico/{print}' instance_types_globo.ttl >> lugar.ttl
-      // awk -F ' ' '$3 ~ /Bairro/{print}' instance_types_globo.ttl >> lugar.ttl                        
-      // awk -F ' ' '{print $1" "$2" <http://dbpedia.org/ontology/Place> ."}' lugar.ttl > lugar2.ttl
-      // cat pessoa2.ttl organizacao2.ttl lugar2.ttl >> instance_types_globo.ttl
-      // Sort when combining with the dbpedia types file!            
-      
-      // Generate the context file*/
+      // Generate the context file
       //val it = globoModel.listStatements()
       //Context.generateContext(it, outputDir)  
     
       // Generate the final XML, the dump itself
       //Wiki.generateWikiHTML(outputDir + "context_globo.ttl", outputDir + "globo_dump.xml")
-      //Wiki.generateWikiJena(outputDir + "permalinks_globo.ttl", outputDir + "globo_dump.xml", globoModel)
 
       // Get Globo titles so we can save the full URIs from the Globo resources when saving the occs file
-      Context.generateContextTitles(outputDir + "permalinks_globo.ttl", outputDir + "globo_titles.tsv")
+      //Context.generateContextTitles(outputDir + "permalinks_globo.ttl", outputDir + "globo_titles.tsv")
 
       // Generate the oocs file
-      ExtractOccsFromGlobo.saveOccsFile(outputDir + "globo_dump.xml", outputDir + "globo_titles.tsv", outputDir + "occs_globo.tsv")
+      //ExtractOccsFromGlobo.saveOccsFile(outputDir + "globo_dump.xml", outputDir + "globo_titles.tsv", outputDir + "occs_globo.tsv")
+      ExtractOccsFromGlobo.saveTSVFromOccs(outputDir + "occs_globo.tsv", outputDir + "surfaceForms-fromOccs-globo.tsv")
 
       // Generate the Globo DBpedia mapping      
       //GloboToDbpedia.generateGlbDbMapping(outputDir + "labels_globo.nt", outputDir + "sorted_labels_pt.nt", outputDir + "globo_map_dbpedia.nt")      

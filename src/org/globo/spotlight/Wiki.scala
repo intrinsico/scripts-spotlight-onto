@@ -242,47 +242,47 @@ object Wiki {
             currentPages = i
             println (currentPages + " HTML pages processed.")            
           }             
-          val document = Jsoup.parse(pageBuffer.toString)  
+          val document = Jsoup.parse(pageBuffer.toString())
           pageBuffer.delete(0, pageBuffer.length)
-	      pageBuffer = new StringBuilder
-	      
-	      // Get title according to case with UTF-8	  	      
-	      var encBytes = document.title().replaceAll("&","e").getBytes(DEFAULT_ENCODING)	      	                     
-	      val title = getCorrectTitle(getCorrectString(new String(encBytes, "UTF-8"), new String(encBytes, DEFAULT_ENCODING)))	                          	  	      	      	      	                   
-	      	      
-          // Skip pages without og:description property because this property defines the context	      
-	      encBytes = null
-	      val correctContext = getCorrectContext(document)
-	      //encBytes = document.select("meta[property=og:description]").attr("content").replaceAll("&","e").getBytes(DEFAULT_ENCODING)
-	      encBytes = correctContext.replaceAll("&","e").getBytes(DEFAULT_ENCODING)
-	      if (encBytes.length != 0) {	      		   
-	        var context = getCorrectString(new String(encBytes, "UTF-8"), new String(encBytes, DEFAULT_ENCODING))		    		      	            	     	      	                   
-		      
-		    // The final part is to append the actual page to the buffer
-		    buffer.append("\t<page>\n")
-		    buffer.append("\t\t<title>")
-		    buffer.append(title)
-		    buffer.append("</title>\n")
-		    buffer.append("\t\t<ns>0</ns>\n")
-		    buffer.append("\t\t<id>" + i + "</id>\n")
-		    buffer.append("\t\t<revision>\n")
-		    buffer.append("\t\t\t<text>\n")
-		    buffer.append("\t\t\t")
-		    buffer.append(context)	      	    		     	      
-		    buffer.append("\n")
-		    buffer.append("\t\t\t</text>\n")
-		    buffer.append("\t\t</revision>\n")
-		    buffer.append("\t</page>\n")		      		  
-	          
-	        if (i % 200 == 0 && !buffer.isEmpty) {
-		      appendToFile(outputFile, buffer.toString().dropRight(1))
-		      buffer.delete(0, buffer.length)
-		      buffer = new StringBuilder
-	        }   
-	        i += 1	    
-	      }          
+          pageBuffer = new StringBuilder
+
+          // Get title according to case with UTF-8
+          var encBytes = document.title().replaceAll("&","e").getBytes(DEFAULT_ENCODING)
+          val title = getCorrectTitle(getCorrectString(new String(encBytes, "UTF-8"), new String(encBytes, DEFAULT_ENCODING)))
+
+            // Skip pages without og:description property because this property defines the context
           encBytes = null
-	    }    
+          val correctContext = getCorrectContext(document)
+          //encBytes = document.select("meta[property=og:description]").attr("content").replaceAll("&","e").getBytes(DEFAULT_ENCODING)
+          encBytes = correctContext.replaceAll("&","e").getBytes(DEFAULT_ENCODING)
+          if (encBytes.length != 0) {
+            val context = getCorrectString(new String(encBytes, "UTF-8"), new String(encBytes, DEFAULT_ENCODING))
+
+            // The final part is to append the actual page to the buffer
+            buffer.append("\t<page>\n")
+            buffer.append("\t\t<title>")
+            buffer.append(title)
+            buffer.append("</title>\n")
+            buffer.append("\t\t<ns>0</ns>\n")
+            buffer.append("\t\t<id>" + i + "</id>\n")
+            buffer.append("\t\t<revision>\n")
+            buffer.append("\t\t\t<text>\n")
+            buffer.append("\t\t\t")
+            buffer.append(context)
+            buffer.append("\n")
+            buffer.append("\t\t\t</text>\n")
+            buffer.append("\t\t</revision>\n")
+            buffer.append("\t</page>\n")
+
+            if (i % 200 == 0 && !buffer.isEmpty) {
+              appendToFile(outputFile, buffer.toString().dropRight(1))
+              buffer.delete(0, buffer.length)
+              buffer = new StringBuilder
+            }
+            i += 1
+	        }
+          encBytes = null
+	      }
       } catch {
         case e: IOException => println("An error occurred while parsing this page!")
       }

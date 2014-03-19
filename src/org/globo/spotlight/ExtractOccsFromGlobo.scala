@@ -9,7 +9,7 @@ package org.globo.spotlight
  */
 
 import scala.io.Source
-import scala.collection.parallel.mutable
+import scala.collection.mutable
 import java.io.PrintStream
 
 object ExtractOccsFromGlobo {
@@ -18,11 +18,12 @@ object ExtractOccsFromGlobo {
   val TEXT_STATE = 2
   val END_STATE = 3
   var currentState = IDLE_STATE
+  var oldState = IDLE_STATE
 
   var currentTitle = ""
   var currentContext = ""
   var currentParagraph = ""
-  var currentOffset = "-1"
+  var currentOffset = -1
 
   def updateCurrentState(currentLine: String): Int = {
     currentLine match {
@@ -30,6 +31,10 @@ object ExtractOccsFromGlobo {
       case x if x.contains("<ns>") => IDLE_STATE
       case x if x.contains("<text>") => TEXT_STATE
       case x if x.contains("</text>") => END_STATE
+      case _ => {
+        if (!oldState.equals(TEXT_STATE)) IDLE_STATE
+        else TEXT_STATE
+      }
     }
   }
 
@@ -45,25 +50,44 @@ object ExtractOccsFromGlobo {
     }
 
     for (line <- Source.fromFile(dumpFile).getLines()) {
+      oldState = currentState
       currentState = updateCurrentState(line)
 
       currentState match {
-        case x if x == TITLE_STATE => {
-          currentTitle = line.replaceFirst("<title>","").replaceFirst("</title>","")
+        case x if x.equals(TITLE_STATE) => {
+          currentTitle = line.trim.replaceFirst("<title>","").replaceFirst("</title>","")
         }
-        case x if x == TEXT_STATE => {
-          if (!line.contains("<text>")) currentContext = line
+        case x if x.equals(TEXT_STATE) => {
+          if (!line.contains("<text>")) {
+            currentContext = line.replaceAll("\t","")
+            currentOffset = currentContext.indexOfSlice(currentTitle)
+          }
         }
-        case x if x == END_STATE => {
+        case x if x.equals(END_STATE) => {
           val currentValue = titlesHash.getOrElse(currentTitle, ("", ""))
           if (currentValue._1 != "") {
-            occsStream.println(currentTitle+"-p1l1" + '\t' + currentValue._2 + '\t' + currentTitle + '\t' + currentContext + '\t' + "-1")
+            occsStream.println(currentTitle+"-p1l1" + '\t' + currentValue._1 + '\t' + currentTitle + '\t' + currentContext + '\t' + currentOffset.toString)
           }
           currentTitle = ""
           currentContext = ""
+          currentOffset = -1
+          currentState = IDLE_STATE
         }
+        case _ =>
       }
-
     }
+  }
+
+  def saveTSVFromOccs(occsFile: String, output: String) {
+    val tsvStream = new PrintStream(output)
+
+    println("Saving the TSV file from the Globo occs...")
+    for (line <- Source.fromFile(occsFile).getLines()) {
+      val lineArray = line.split('\t')
+      if (lineArray.length >= 3) {
+        tsvStream.println(lineArray(2) + '\t' + lineArray(1))
+      }
+    }
+    println("Done.")
   }
 }

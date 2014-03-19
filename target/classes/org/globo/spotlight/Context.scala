@@ -87,7 +87,7 @@ object Context {
       }
       
       if (i != 0 && i % 50 == 0) {
-        appendToFile(outputFile, buffer.toString.dropRight(1))
+        appendToFile(outputFile, buffer.toString().dropRight(1))
         buffer.delete(0, buffer.length)
         buffer = new StringBuilder
       } 

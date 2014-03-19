@@ -72,8 +72,47 @@ object JenaUtils {
         "OPTIONAL { ?org base:nome_completo ?nc . } . " +        
       "} " +      
     "}"
-  }    
-  
+  }
+
+  def buildQueryRDFPersonType(): String = {
+    "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>" + '\n' +
+    "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>" + '\n' +
+    "PREFIX person:	<http://semantica.globo.com/person/>" + '\n' +
+    "SELECT ?class ?pessoa" + '\n' +
+    "WHERE {" +
+      "{ " +
+        "?class rdfs:subClassOf* person:Person . " +
+        "?pessoa rdf:type ?class . " +
+      "} " +
+    "}"
+  }
+
+  def buildQueryRDFPlaceType(): String = {
+    "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>" + '\n' +
+    "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>" + '\n' +
+    "PREFIX place: <http://semantica.globo.com/place/>" + '\n' +
+    "SELECT ?class ?lugar" + '\n' +
+    "WHERE {" +
+      "{ " +
+        "?class rdfs:subClassOf* place:Place . " +
+        "?lugar rdf:type ?class . " +
+      "} " +
+    "}"
+  }
+
+  def buildQueryRDFOrgType(): String = {
+    "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>" + '\n' +
+    "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>" + '\n' +
+    "PREFIX organization: <http://semantica.globo.com/organization/>" + '\n' +
+    "SELECT ?class ?org" + '\n' +
+    "WHERE {" +
+      "{ " +
+        "?class rdfs:subClassOf* organization:Organization . " +
+        "?org rdf:type ?class . " +
+      "} " +
+    "}"
+  }
+
   def buildQueryRDFAllTypes(): String = {    
     "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>" + '\n' +    
     "SELECT ?s ?o " + '\n' +
