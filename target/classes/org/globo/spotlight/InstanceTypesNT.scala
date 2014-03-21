@@ -15,7 +15,6 @@ object InstanceTypesNT {
     var i = 1
     println("Generating the instance types file...")
     if (placeTypeResult.hasNext || personTypeResult.hasNext || orgTypeResult.hasNext) {
-      println("Creating Instance Types file...")
       // Iterating the ResultSet to get all its elements
       while (placeTypeResult.hasNext) {
         val currentSolution = placeTypeResult.nextSolution()

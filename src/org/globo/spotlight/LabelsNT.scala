@@ -30,8 +30,8 @@ object LabelsNT {
     val labelsStream = new PrintStream(new File(output))
     
     var i = 1
+    println("Creating Labels file, NT format...")
     if (labelsResults.hasNext) {
-      println("Creating Labels file, NT format...")
       // Iterating the ResultSet to get all its elements
       while (labelsResults.hasNext) {        
         val currentSolution = labelsResults.nextSolution()
@@ -80,8 +80,8 @@ object LabelsNT {
     val labelsStream = new PrintStream(new File(output))
     
     var i = 1
+    println("Creating Labels file, TSV format...")
     if (labelsResults.hasNext) {
-      println("Creating Labels file, TSV format...")
       // Iterating the ResultSet to get all its elements
       while (labelsResults.hasNext) {        
         val currentSolution = labelsResults.nextSolution()

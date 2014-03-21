@@ -3,6 +3,7 @@
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
     <file url="file://$PROJECT_DIR$" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/src/org/globo/spotlight/GloboToDbpedia.scala" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/src/org/globo/spotlight/util/FileUtils.scala" charset="ISO-8859-1" />
   </component>
 </project>
 

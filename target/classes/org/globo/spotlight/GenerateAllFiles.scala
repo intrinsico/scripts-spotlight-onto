@@ -38,56 +38,47 @@ object GenerateAllFiles {
       // The Globo dataset file. All the base files concatenated without using graph files
       val turtleFile = args(1)
                        
-      val inputDir = base_dir + "/turtle_files2/"
-      val outputDir = base_dir + "/output_ori/"
+      val inputDir = base_dir + "/turtle_files/"
+      val outputDir = base_dir + "/output/"
       val tdbDir = base_dir + "/TDB/"
-      
-      // Creates all folders we are going to need
-      createDir(base_dir)
-      createDir(inputDir)      
-      createDir(outputDir)
-      createDir(tdbDir)
             
-      //val file = new File(inputDir)      
-      //if(file.isDirectory()) { 
-	  //	if(file.list().length == 0){
-	  //	  println("Please put all the .ttl extension files from the globo dataset inside the folder " + inputDir)
-	  //	  System.exit(1)
-	  //	}
-      //} else {
-      //  println("Please use a valid input directory.")
-      //  System.exit(1)
-      //}
+      val file = new File(inputDir)
+      if(file.isDirectory) {
+	  	  if(file.list().length == 0){
+	  	    println("Please put all the .ttl extension files from the globo dataset inside the folder " + inputDir)
+	  	    System.exit(1)
+	  	  }
+      } else {
+        println("Please use a valid input directory.")
+        System.exit(1)
+      }
                
       // Clean the current TDB folder so we don't receive a null pointer exception
       cleanDirectory(new java.io.File(tdbDir))
     
       // Combines all globo files into one .ttl
-      //generateDataset(inputDir, inputDir + turtleFile)      
-    
-      ////////////////////////////////////////////////////// LABELS ///////////////////////////////////////////////
+      //generateDataset(inputDir, inputDir + turtleFile)
+
+      // Generates the Globo model so we can search for entities
       //val globoModel = loadFileToJena(inputDir + turtleFile, tdbDir)
+
+      ////////////////////////////////////////////////////// LABELS ///////////////////////////////////////////////
       //val labelsQuery = buildQueryRDFLabelsWithTypesPOP()
-      //val labelsResults = executeQuery(labelsQuery, globoModel)
-      //println("Done.")
+      //var labelsResults = executeQuery(labelsQuery, globoModel)
       //LabelsNT.generateLabelsTSV(labelsResults, outputDir + "surfaceForms-fromLabels-globo.tsv")
-      //LabelsNT.generateLabelsNT(labelsResults, outputDir + "labels_globo.nt")     
-      
-      // Compress the final file
-      // bzip2 -k labels_pt.nt
+      //labelsResults = executeQuery(labelsQuery, globoModel)
+      //LabelsNT.generateLabelsNT(labelsResults, outputDir + "labels_globo.nt")
       
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////
       ///////////////////////////////////////////////// INSTANCE TYPES ////////////////////////////////////////////
 
-      // A query to find if the subject from the main language has any types in the instance types triples file
-      //println("Querying for entries with the types Person, Location and Organization...")
+      // A query to find the types of all entities with types Person, Location and Organization
       //val placeTypeQuery = buildQueryRDFPlaceType()
       //val placeTypeResults = executeQuery(placeTypeQuery, globoModel)
       //val personTypeQuery = buildQueryRDFPersonType()
       //val personTypeResults = executeQuery(personTypeQuery, globoModel)
       //val orgTypeQuery = buildQueryRDFOrgType()
       //val orgTypeResults = executeQuery(orgTypeQuery, globoModel)
-      //println("Done.")
       
       // Generating the instance types file itself
       //InstanceTypesNT.generateInstanceTypesNT(placeTypeResults, personTypeResults, orgTypeResults, outputDir + "instance_types_globo.nt")
@@ -104,14 +95,13 @@ object GenerateAllFiles {
 
       // Generate the oocs file
       //ExtractOccsFromGlobo.saveOccsFile(outputDir + "globo_dump.xml", outputDir + "globo_titles.tsv", outputDir + "occs_globo.tsv")
-      ExtractOccsFromGlobo.saveTSVFromOccs(outputDir + "occs_globo.tsv", outputDir + "surfaceForms-fromOccs-globo.tsv")
+      //ExtractOccsFromGlobo.saveTSVFromOccs(outputDir + "occs_globo.tsv", outputDir + "surfaceForms-fromOccs-globo.tsv")
 
       // Generate the Globo DBpedia mapping      
-      //GloboToDbpedia.generateGlbDbMapping(outputDir + "labels_globo.nt", outputDir + "sorted_labels_pt.nt", outputDir + "globo_map_dbpedia.nt")      
+      //GloboToDbpedia.generateGlbDbMapping(outputDir + "labels_globo.nt", outputDir + "labels_pt.nt", outputDir + "globo_map_dbpedia.nt")
      
       // Get or tries to get only the correct mapping from the Globo -> Wikipedia mapping
-      // sort globo_map_dbpedia.nt > sorted_globo_map_dbpedia.nt
-      //GloboToDbpedia.getCorrectEntries(outputDir + "sorted_globo_map_dbpedia.nt", "E:/scripts-globo/resources/estados.list", outputDir + "globo_final_map_dbpedia.nt")
+      GloboToDbpedia.getCorrectEntries(outputDir + "globo_map_dbpedia.nt", outputDir + "globo_final_map_dbpedia.nt")
     }
   }
 }

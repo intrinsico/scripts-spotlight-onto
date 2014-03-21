@@ -123,7 +123,7 @@ object GloboToDbpedia {
     }
   }
   
-  def getCorrectEntries(glbDbMapFile: String, estadosFile: String, output: String) {
+  def getCorrectEntries(glbDbMapFile: String, output: String) {
     var i = 1
     var j = 1
     var corrects = 0
@@ -133,10 +133,7 @@ object GloboToDbpedia {
     val MIN_INDEX = 0
     val MAX_INDEX = 25000
 
-    println(estadosList)
-    System.exit(1)
     // Generate the tuples list of states we are going to need, Complete name and Abbreviation
-    //val estadosList = generateStatesList(estadosFile)
     val correctEntriesStream = new PrintStream(new File(output))
     println("Getting the correct entries from the Globo to DBpedia mapping...")
     loop.breakable {
@@ -240,7 +237,7 @@ object GloboToDbpedia {
       val glbLineArray = glbLine.split(" ",3)
       
       if (glbLineArray.length >= 3) {          
-        dbThirdColumn.find((x: Tuple2[String, Int]) => x._1 == glbLineArray(2)) match {
+        dbThirdColumn.find((x: (String, Int)) => x._1 == glbLineArray(2)) match {
           case Some(x) => {            
             mappingStream.println(glbLineArray(0) + " <http://www.w3.org/2002/07/owl#sameAs> " + dbFirstColumn(x._2) + " .")
 	          

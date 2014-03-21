@@ -127,14 +127,14 @@ object JenaUtils {
   
   def loadFileToJena(turtleFile: String, tdbPath: String): Model = {
     val in = new BufferedInputStream(new FileInputStream(turtleFile))    
-    val charsetDecoder = Charset.forName("utf-8").newDecoder()        
+    val charsetDecoder = Charset.forName("utf-8").newDecoder()
     
-	charsetDecoder.onMalformedInput(CodingErrorAction.REPLACE)
-	charsetDecoder.onUnmappableCharacter(CodingErrorAction.REPLACE)
-	val inputReader = new InputStreamReader(in, charsetDecoder)                 
+	  charsetDecoder.onMalformedInput(CodingErrorAction.REPLACE)
+	  charsetDecoder.onUnmappableCharacter(CodingErrorAction.REPLACE)
+	  val inputReader = new InputStreamReader(in, charsetDecoder)
     
-	// Create a model to represent the Globo dataset
-	println("Reading file into Jena")
+	  // Create a model to represent the Globo dataset
+	  println("Reading file into Jena")
     val fbTdbStore = createModel(tdbPath)	
     fbTdbStore.read(inputReader, null, "TURTLE")
     fbTdbStore

@@ -42,16 +42,30 @@ Se houver falha no segundo comando mvn install relativo a encoding, basta modifi
 
 (falta linkar para o download dos arquivos da Globo)
 
-Navegue até o diretório desejado para os arquivos da Globo, de preferência crie um novo diretório. Execute os comandos:
+Navegue até o diretório desejado para os arquivos da Globo. Execute os comandos:
 
 ```
 mkdir globo_resources
 cd globo_resources
 mkdir turtle_files
 mkdir graphs
+mkdir TDB
+mkdir output
 wget FALTA_O_LINK
 mv *.graph graphs/
 mv *.ttl turtle_files/
+```
+
+Copy the DBpedia labels file into the Globo resources output folder, example:
+
+```
+cp /home/ubuntu/Spotlight/data/dbpedia/pt/labels_pt.nt.bz2 /home/ubuntu/globo_resources/output
+```
+
+Extract the file with bunzip2. Go to the output folder and execute the following command:
+
+```
+bunzip2 labels_pt.nt.bz2
 ```
 
 ##3. Baixando os arquivos da DBpedia
@@ -94,6 +108,12 @@ cat surfaceForms-fromLabels-globo.tsv surfaceForms-fromOccs-globo.tsv > surfaceF
 ##5. Indexando os dados
 
 Navegue até o diretório dbpedia-spotlight/bin e execute o shell script [index.sh](https://github.com/intrinsic-ltda/dbpedia-spotlight/blob/master/bin/index.sh)
+
+Passe como parâmetros o diretório raíz de onde estão os arquivos da Globo e a língua abreviada, exemplo
+
+```
+./index.sh /home/ubuntu/globo_resources pt
+```
 
 ##6. Acessando as APIs do DBpedia Spotlight
 
