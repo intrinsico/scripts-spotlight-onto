@@ -57,48 +57,48 @@ object GenerateAllFiles {
       cleanDirectory(new java.io.File(tdbDir))
     
       // Combines all globo files into one .ttl
-      //generateDataset(inputDir, inputDir + turtleFile)
+      generateDataset(inputDir, inputDir + turtleFile)
 
       // Generates the Globo model so we can search for entities
-      //val globoModel = loadFileToJena(inputDir + turtleFile, tdbDir)
+      val globoModel = loadFileToJena(inputDir + turtleFile, tdbDir)
 
       ////////////////////////////////////////////////////// LABELS ///////////////////////////////////////////////
-      //val labelsQuery = buildQueryRDFLabelsWithTypesPOP()
-      //var labelsResults = executeQuery(labelsQuery, globoModel)
-      //LabelsNT.generateLabelsTSV(labelsResults, outputDir + "surfaceForms-fromLabels-globo.tsv")
-      //labelsResults = executeQuery(labelsQuery, globoModel)
-      //LabelsNT.generateLabelsNT(labelsResults, outputDir + "labels_globo.nt")
+      val labelsQuery = buildQueryRDFLabelsWithTypesPOP()
+      var labelsResults = executeQuery(labelsQuery, globoModel)
+      LabelsNT.generateLabelsTSV(labelsResults, outputDir + "surfaceForms-fromLabels-globo.tsv")
+      labelsResults = executeQuery(labelsQuery, globoModel)
+      LabelsNT.generateLabelsNT(labelsResults, outputDir + "labels_globo.nt")
       
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////
       ///////////////////////////////////////////////// INSTANCE TYPES ////////////////////////////////////////////
 
       // A query to find the types of all entities with types Person, Location and Organization
-      //val placeTypeQuery = buildQueryRDFPlaceType()
-      //val placeTypeResults = executeQuery(placeTypeQuery, globoModel)
-      //val personTypeQuery = buildQueryRDFPersonType()
-      //val personTypeResults = executeQuery(personTypeQuery, globoModel)
-      //val orgTypeQuery = buildQueryRDFOrgType()
-      //val orgTypeResults = executeQuery(orgTypeQuery, globoModel)
+      val placeTypeQuery = buildQueryRDFPlaceType()
+      val placeTypeResults = executeQuery(placeTypeQuery, globoModel)
+      val personTypeQuery = buildQueryRDFPersonType()
+      val personTypeResults = executeQuery(personTypeQuery, globoModel)
+      val orgTypeQuery = buildQueryRDFOrgType()
+      val orgTypeResults = executeQuery(orgTypeQuery, globoModel)
       
       // Generating the instance types file itself
-      //InstanceTypesNT.generateInstanceTypesNT(placeTypeResults, personTypeResults, orgTypeResults, outputDir + "instance_types_globo.nt")
+      InstanceTypesNT.generateInstanceTypesNT(placeTypeResults, personTypeResults, orgTypeResults, outputDir + "instance_types_globo.nt")
       
       // Generate the context file
-      //val it = globoModel.listStatements()
-      //Context.generateContext(it, outputDir)  
+      val it = globoModel.listStatements()
+      Context.generateContext(it, outputDir)  
     
       // Generate the final XML, the dump itself
-      //Wiki.generateWikiHTML(outputDir + "context_globo.ttl", outputDir + "globo_dump.xml")
+      Wiki.generateWikiHTML(outputDir + "context_globo.ttl", outputDir + "globo_dump.xml")
 
       // Get Globo titles so we can save the full URIs from the Globo resources when saving the occs file
-      //Context.generateContextTitles(outputDir + "permalinks_globo.ttl", outputDir + "globo_titles.tsv")
+      Context.generateContextTitles(outputDir + "permalinks_globo.ttl", outputDir + "globo_titles.tsv")
 
       // Generate the oocs file
-      //ExtractOccsFromGlobo.saveOccsFile(outputDir + "globo_dump.xml", outputDir + "globo_titles.tsv", outputDir + "occs_globo.tsv")
-      //ExtractOccsFromGlobo.saveTSVFromOccs(outputDir + "occs_globo.tsv", outputDir + "surfaceForms-fromOccs-globo.tsv")
+      ExtractOccsFromGlobo.saveOccsFile(outputDir + "globo_dump.xml", outputDir + "globo_titles.tsv", outputDir + "occs_globo.tsv")
+      ExtractOccsFromGlobo.saveTSVFromOccs(outputDir + "occs_globo.tsv", outputDir + "surfaceForms-fromOccs-globo.tsv")
 
       // Generate the Globo DBpedia mapping      
-      //GloboToDbpedia.generateGlbDbMapping(outputDir + "labels_globo.nt", outputDir + "labels_pt.nt", outputDir + "globo_map_dbpedia.nt")
+      GloboToDbpedia.generateGlbDbMapping(outputDir + "labels_globo.nt", outputDir + "labels_pt.nt", outputDir + "globo_map_dbpedia.nt")
      
       // Get or tries to get only the correct mapping from the Globo -> Wikipedia mapping
       GloboToDbpedia.getCorrectEntries(outputDir + "globo_map_dbpedia.nt", outputDir + "globo_final_map_dbpedia.nt")
